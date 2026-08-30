@@ -1,0 +1,38 @@
+{
+  "name": "neo-lite-ui",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "sideEffects": [
+    "**/*.css"
+  ],
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "storybook": "HOME=.storybook-home STORYBOOK_DISABLE_TELEMETRY=1 storybook dev -p 6006",
+    "build-storybook": "HOME=.storybook-home STORYBOOK_DISABLE_TELEMETRY=1 storybook build"
+  },
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "import": "./src/index.ts"
+    },
+    "./styles/theme.css": "./src/styles/theme.css"
+  },
+  "peerDependencies": {
+    "react": ">=18",
+    "react-dom": ">=18"
+  },
+  "devDependencies": {
+    "@storybook/react-vite": "^9.1.20",
+    "@tailwindcss/vite": "^4.3.3",
+    "@types/react": "^19.2.7",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^4.7.0",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "storybook": "^9.1.20",
+    "tailwindcss": "^4.3.3",
+    "typescript": "^5.9.3",
+    "vite": "^6.4.3"
+  }
+}
