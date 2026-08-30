@@ -55,7 +55,7 @@ export function Button({
     <button
       type={type}
       className={cn(
-        "inline-flex items-center justify-center border font-sans font-normal leading-none transition-[background-color,box-shadow,transform] duration-150 ease-out hover:shadow-md focus-visible:outline-none disabled:pointer-events-none disabled:opacity-[var(--disabled-opacity)] [&_svg]:shrink-0",
+        "inline-flex items-center justify-center border font-sans font-normal leading-none transition-[background-color,box-shadow,transform] duration-[var(--duration)] ease-[var(--easing)] hover:translate-y-[var(--transform-hover-offset)] hover:shadow-md focus-visible:outline-none disabled:pointer-events-none disabled:opacity-[var(--disabled-opacity)] [&_svg]:shrink-0",
         sizeClasses[size],
         iconSvgClasses[size],
         variantClasses[variant],

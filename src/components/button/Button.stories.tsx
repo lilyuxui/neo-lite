@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import type { ReactNode } from "react";
 
 import { Button, type ButtonSize, type ButtonVariant } from "./Button";
 
@@ -20,6 +21,39 @@ function ArrowRightIcon() {
       <path d="M5 12h14" />
       <path d="m12 5 7 7-7 7" />
     </svg>
+  );
+}
+
+function ButtonMatrix({
+  children,
+  leadingIcon,
+  trailingIcon,
+  iconOnly = false,
+}: {
+  children: string;
+  leadingIcon?: ReactNode;
+  trailingIcon?: ReactNode;
+  iconOnly?: boolean;
+}) {
+  return (
+    <div className="grid gap-4">
+      {variants.map((variant) => (
+        <div key={variant} className="flex flex-wrap items-center gap-4">
+          {sizes.map((size) => (
+            <Button
+              key={`${variant}-${size}`}
+              variant={variant}
+              size={size}
+              leadingIcon={leadingIcon}
+              trailingIcon={trailingIcon}
+              aria-label={iconOnly ? `${variant} ${size}` : undefined}
+            >
+              {iconOnly ? <ArrowRightIcon /> : `${children} ${variant} ${size}`}
+            </Button>
+          ))}
+        </div>
+      ))}
+    </div>
   );
 }
 
@@ -47,122 +81,30 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-export const Playground: Story = {};
-
-export const Variants: Story = {
-  render: () => (
-    <div className="flex flex-wrap items-center gap-4">
-      {variants.map((variant) => (
-        <Button key={variant} variant={variant}>
-          {variant}
-        </Button>
-      ))}
-    </div>
-  ),
-};
-
-export const Sizes: Story = {
-  render: () => (
-    <div className="flex flex-wrap items-center gap-4">
-      {sizes.map((size) => (
-        <Button key={size} size={size}>
-          {size}
-        </Button>
-      ))}
-    </div>
-  ),
+export const Playground: Story = {
+  render: () => <ButtonMatrix>Button</ButtonMatrix>,
 };
 
 export const TextOnly: Story = {
-  args: {
-    children: "Continue",
-  },
+  render: () => <ButtonMatrix>Text</ButtonMatrix>,
 };
 
 export const LeadingIcon: Story = {
-  args: {
-    children: "Back",
-    leadingIcon: <ArrowLeftIcon />,
-  },
+  render: () => <ButtonMatrix leadingIcon={<ArrowLeftIcon />}>Leading</ButtonMatrix>,
 };
 
 export const TrailingIcon: Story = {
-  args: {
-    children: "Next",
-    trailingIcon: <ArrowRightIcon />,
-  },
+  render: () => <ButtonMatrix trailingIcon={<ArrowRightIcon />}>Trailing</ButtonMatrix>,
 };
 
 export const BothIcons: Story = {
-  args: {
-    children: "Move",
-    leadingIcon: <ArrowLeftIcon />,
-    trailingIcon: <ArrowRightIcon />,
-  },
+  render: () => (
+    <ButtonMatrix leadingIcon={<ArrowLeftIcon />} trailingIcon={<ArrowRightIcon />}>
+      Both
+    </ButtonMatrix>
+  ),
 };
 
 export const IconOnly: Story = {
-  args: {
-    "aria-label": "Next",
-    children: <ArrowRightIcon />,
-  },
-};
-
-export const Disabled: Story = {
-  args: {
-    children: "Disabled",
-    disabled: true,
-  },
-};
-
-export const Hover: Story = {
-  render: () => (
-    <div className="flex flex-wrap items-center gap-4">
-      {variants.map((variant) => (
-        <Button
-          key={variant}
-          variant={variant}
-          className={variant === "primary" ? "bg-primary-hover shadow-md" : "shadow-md"}
-        >
-          {variant}
-        </Button>
-      ))}
-    </div>
-  ),
-};
-
-export const FocusVisible: Story = {
-  render: () => (
-    <div className="flex flex-wrap items-center gap-4">
-      {variants.map((variant) => (
-        <Button
-          key={variant}
-          variant={variant}
-          className={
-            variant === "destructive"
-              ? "shadow-destructive-focus"
-              : "shadow-focus"
-          }
-        >
-          {variant}
-        </Button>
-      ))}
-    </div>
-  ),
-};
-
-export const VariantSizeMatrix: Story = {
-  render: () => (
-    <div className="grid gap-4">
-      {variants.map((variant) => (
-        <div key={variant} className="flex flex-wrap items-center gap-4">
-          {sizes.map((size) => (
-            <Button key={`${variant}-${size}`} variant={variant} size={size}>
-              {variant} {size}
-            </Button>
-          ))}
-        </div>
-      ))}
-    </div>
-  ),
+  render: () => <ButtonMatrix iconOnly>Icon only</ButtonMatrix>,
 };
