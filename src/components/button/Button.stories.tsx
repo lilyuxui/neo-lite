@@ -29,11 +29,13 @@ function ButtonMatrix({
   leadingIcon,
   trailingIcon,
   iconOnly = false,
+  disabled = false,
 }: {
   children: string;
   leadingIcon?: ReactNode;
   trailingIcon?: ReactNode;
   iconOnly?: boolean;
+  disabled?: boolean;
 }) {
   return (
     <div className="grid gap-4">
@@ -47,6 +49,7 @@ function ButtonMatrix({
               leadingIcon={leadingIcon}
               trailingIcon={trailingIcon}
               aria-label={iconOnly ? `${variant} ${size}` : undefined}
+              disabled={disabled}
             >
               {iconOnly ? <ArrowRightIcon /> : `${children} ${variant} ${size}`}
             </Button>
@@ -107,4 +110,8 @@ export const BothIcons: Story = {
 
 export const IconOnly: Story = {
   render: () => <ButtonMatrix iconOnly>Icon only</ButtonMatrix>,
+};
+
+export const Disabled: Story = {
+  render: () => <ButtonMatrix disabled>Disabled</ButtonMatrix>,
 };

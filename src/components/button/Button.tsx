@@ -24,9 +24,9 @@ const variantClasses: Record<ButtonVariant, string> = {
 };
 
 const sizeClasses: Record<ButtonSize, string> = {
-  xs: "p-2 gap-1 rounded-sm text-sm",
-  sm: "p-3 gap-2 rounded-sm text-base",
-  lg: "p-4 gap-3 rounded-sm text-xl",
+  xs: "h-[var(--button-height-xs)] px-2 gap-1 rounded-sm text-sm [&:has(>svg:only-child)]:w-[var(--button-height-xs)]",
+  sm: "h-[var(--button-height-sm)] px-3 gap-2 rounded-sm text-base [&:has(>svg:only-child)]:w-[var(--button-height-sm)]",
+  lg: "h-[var(--button-height-lg)] px-4 gap-3 rounded-sm text-xl [&:has(>svg:only-child)]:w-[var(--button-height-lg)]",
 };
 
 const iconClasses: Record<ButtonSize, string> = {

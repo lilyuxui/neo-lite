@@ -149,6 +149,15 @@
 
   --destructive-focus-shadow:
     0 0 0 2px var(--destructive-focus);
+
+
+  /* =======================================================
+     Component Geometry
+     ======================================================= */
+
+  --button-height-xs: 38px;
+  --button-height-sm: 50px;
+  --button-height-lg: 64px;
 }
 
 
