@@ -150,6 +150,12 @@
   --destructive-focus-shadow:
     0 0 0 2px var(--destructive-focus);
 
+  --selected-focus-shadow:
+    var(--shadow-1), var(--focus-shadow);
+
+  --selected-destructive-focus-shadow:
+    var(--shadow-1), var(--destructive-focus-shadow);
+
 
   /* =======================================================
      Component Geometry
