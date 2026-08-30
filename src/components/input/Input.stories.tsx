@@ -1,5 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { useState } from "react";
 
+import xIcon from "../../assets/icons/x.svg";
 import { Input } from "./Input";
 
 function SearchIcon() {
@@ -22,6 +24,33 @@ function CommandKey() {
     <kbd className="font-sans text-sm leading-[160%] text-muted-foreground">
       Cmd K
     </kbd>
+  );
+}
+
+function SearchInputWithClear() {
+  const [search, setSearch] = useState("input");
+
+  return (
+    <Input
+      label="Search"
+      type="search"
+      value={search}
+      onChange={(event) => setSearch(event.target.value)}
+      placeholder="Search components"
+      className="[&::-webkit-search-cancel-button]:appearance-none"
+      leadingDecoration={<SearchIcon />}
+      trailingDecoration={
+        <button
+          type="button"
+          aria-label="Clear search"
+          className="grid size-4 place-items-center"
+          onClick={() => setSearch("")}
+        >
+          <img src={xIcon} alt="" aria-hidden="true" className="size-4" />
+        </button>
+      }
+      hint="Search by component name."
+    />
   );
 }
 
@@ -59,13 +88,7 @@ export const Playground: Story = {
 export const WithDecorations: Story = {
   render: () => (
     <div className="grid max-w-sm gap-4">
-      <Input
-        label="Search"
-        type="search"
-        placeholder="Search components"
-        leadingDecoration={<SearchIcon />}
-        hint="Search by component name."
-      />
+      <SearchInputWithClear />
       <Input
         label="Command"
         placeholder="Open command menu"

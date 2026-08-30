@@ -7,7 +7,6 @@ const meta = {
   component: Checkbox,
   args: {
     "aria-label": "Select item",
-    checked: false,
     disabled: false,
     error: false,
     required: false,
@@ -15,6 +14,9 @@ const meta = {
   argTypes: {
     checked: {
       control: "boolean",
+      table: {
+        disable: true,
+      },
     },
     disabled: {
       control: "boolean",
@@ -32,11 +34,15 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-export const Playground: Story = {};
+export const Playground: Story = {
+  args: {
+    error: false,
+    required: false
+  }
+};
 
 export const Indeterminate: Story = {
   args: {
-    checked: false,
     indeterminate: true,
   },
 };
