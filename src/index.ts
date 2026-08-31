@@ -2,6 +2,8 @@ export { Button } from "./components/button";
 export type { ButtonProps, ButtonSize, ButtonVariant } from "./components/button";
 export { Checkbox } from "./components/checkbox";
 export type { CheckboxProps } from "./components/checkbox";
+export { Dialog } from "./components/dialog";
+export type { DialogProps } from "./components/dialog";
 export { Input } from "./components/input";
 export type { InputProps } from "./components/input";
 export { Menu, MenuItem } from "./components/menu";
