@@ -8,7 +8,7 @@ const orientations: CardOrientation[] = ["vertical", "horizontal"];
 
 function CardImage() {
   return (
-    <div className="grid size-full place-items-center bg-muted">
+    <div className="grid size-full min-h-48 place-items-center bg-muted">
       <div className="grid size-24 grid-cols-2 gap-2">
         <div className="border border-border bg-accent" />
         <div className="border border-border bg-background" />
@@ -29,7 +29,13 @@ function CardExample({
   subtitle?: string;
 }) {
   return (
-    <div className={orientation === "horizontal" ? "w-[555px]" : "w-[343px]"}>
+    <div
+      className={
+        orientation === "horizontal"
+          ? "w-[min(100vw-32px,44rem)]"
+          : "w-[min(100vw-32px,24rem)]"
+      }
+    >
       <Card
         orientation={orientation}
         image={<CardImage />}

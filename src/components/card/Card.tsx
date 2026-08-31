@@ -47,10 +47,10 @@ export function Card({
       {image ? (
         <div
           className={cn(
-            "overflow-hidden bg-muted",
+            "overflow-hidden bg-muted [&>img]:size-full [&>img]:object-cover",
             isHorizontal
               ? "min-h-full basis-[38.5%] shrink-0 border-r border-card-foreground"
-              : "h-[206px] w-full border-b border-border",
+              : "aspect-[343/206] w-full border-b border-border",
           )}
         >
           {image}
