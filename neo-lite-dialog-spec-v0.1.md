@@ -27,9 +27,10 @@ The design contains:
 
 ```text
 Dialog
+├── Modal overlay
 ├── Header
 │   ├── Title
-│   └── Close icon
+│   └── Dismiss button
 ├── Content
 │   └── Slot / children
 └── Footer
@@ -46,6 +47,7 @@ width: 640px
 background: var(--card)
 border: 1px solid var(--border)
 border-radius: var(--radius-md) = 8px
+box-shadow: var(--shadow-2)
 display: flex
 direction: column
 overflow: hidden
@@ -61,7 +63,27 @@ width: min(640px, available viewport width - safe margin)
 
 The component should remain responsive on narrow screens.
 
-## 4. Header
+## 4. Modal Overlay
+
+Dialog should render above a modal overlay that covers the viewport.
+
+Overlay:
+
+```text
+position: fixed
+inset: 0
+background: rgba(0, 0, 0, 0.2)
+```
+
+The overlay must block pointer interaction with background content while the Dialog is open.
+
+Clicking the overlay may dismiss the Dialog by calling:
+
+```ts
+onOpenChange(false)
+```
+
+## 5. Header
 
 Header:
 
@@ -92,18 +114,41 @@ Letter spacing: 0
 Color: var(--card-foreground)
 ```
 
-## 5. Close Control
+## 6. Dismiss Button
 
-The Figma design uses a 16 × 16px `Icon / x`.
+The Figma design uses a 24 × 24px `Icon / x` inside a designed dismiss button.
 
 The production implementation should expose a real interactive close button, not a bare icon.
 
 Recommended visual target:
 
 ```text
-icon: 16 × 16px
-button: transparent / icon-only
+icon: 24 × 24px
+button padding: 2px
+button radius: var(--radius-full)
 ```
+
+Dismiss button states:
+
+```text
+Default:
+  background: transparent
+  border: 2px solid transparent
+
+Hover:
+  background: var(--hover)
+  border: 2px solid transparent
+
+Focus:
+  background: transparent
+  border: 2px solid var(--focus-ring)
+
+Focus-hover:
+  background: var(--hover)
+  border: 2px solid var(--focus-ring)
+```
+
+Focus styling should use native focus-visible behaviour.
 
 The close button must have an accessible name such as:
 
@@ -115,7 +160,7 @@ Reuse a stable project close icon if available.
 
 Do not commit temporary Figma MCP asset URLs.
 
-## 6. Content Area
+## 7. Content Area
 
 Content section:
 
@@ -138,7 +183,9 @@ content height: auto
 
 If content can become large, allow the body area to scroll without scrolling the whole page behind the dialog.
 
-## 7. Footer
+If the Dialog has no footer, the content section should not render a bottom divider that visually stacks with the Dialog shell border.
+
+## 8. Footer
 
 Footer:
 
@@ -165,7 +212,7 @@ Submit → primary Button
 
 The production Dialog should reuse the existing Neo-Lite `Button` component rather than reimplement button styling.
 
-## 8. Recommended React API
+## 9. Recommended React API
 
 Recommended v0.1 API:
 
@@ -212,7 +259,7 @@ Usage:
 </Dialog>
 ```
 
-## 9. Why Footer Is a Slot
+## 10. Why Footer Is a Slot
 
 Do not hard-code `Cancel` and `Submit` props into the Dialog API.
 
@@ -236,7 +283,7 @@ no footer
 
 while keeping Dialog focused on layout and modal behaviour.
 
-## 10. Why Title Is a Prop
+## 11. Why Title Is a Prop
 
 The Figma component defines a first-class title in its header.
 
@@ -250,7 +297,7 @@ rather than requiring consumers to manually construct the entire header.
 
 This enables consistent title semantics and accessible labelling.
 
-## 11. Open State
+## 12. Open State
 
 Dialog should support controlled open state:
 
