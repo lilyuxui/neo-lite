@@ -1,32 +1,41 @@
-import type { ButtonHTMLAttributes } from "react";
+import { forwardRef, type ButtonHTMLAttributes, type ReactNode } from "react";
 
-import { cn } from "../../utils/cn";
+import { menuItemClassName } from "./styles";
 
 export interface MenuItemProps
   extends ButtonHTMLAttributes<HTMLButtonElement> {
   selected?: boolean;
+  leadingDecoration?: ReactNode;
 }
 
-export function MenuItem({
-  selected = false,
-  type = "button",
-  className,
-  children,
-  ...props
-}: MenuItemProps) {
-  return (
-    <button
-      type={type}
-      className={cn(
-        "flex min-h-9 w-full items-center gap-3 rounded-sm px-3 py-2 text-left font-sans text-sm font-normal leading-[160%] outline-none focus-visible:shadow-focus disabled:pointer-events-none disabled:opacity-[var(--disabled-opacity)]",
-        selected
-          ? "bg-selected text-selected-foreground"
-          : "bg-background text-foreground hover:bg-hover",
-        className,
-      )}
-      {...props}
-    >
-      {children}
-    </button>
-  );
-}
+export const MenuItem = forwardRef<HTMLButtonElement, MenuItemProps>(
+  (
+    {
+      selected = false,
+      leadingDecoration,
+      type = "button",
+      className,
+      children,
+      ...props
+    },
+    ref,
+  ) => {
+    return (
+      <button
+        ref={ref}
+        type={type}
+        className={menuItemClassName({ selected, className })}
+        {...props}
+      >
+        {leadingDecoration ? (
+          <span className="flex w-5 shrink-0 items-center justify-center p-0.5 [&_svg]:size-4 [&_svg]:shrink-0">
+            {leadingDecoration}
+          </span>
+        ) : null}
+        <span className="min-w-0 flex-1">{children}</span>
+      </button>
+    );
+  },
+);
+
+MenuItem.displayName = "MenuItem";

@@ -1,28 +1,13 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import type { ReactNode } from "react";
 
+import arrowLeftIcon from "../../assets/icons/arrow-left.svg?raw";
+import arrowRightIcon from "../../assets/icons/arrow-right.svg?raw";
+import { Icon } from "../../assets/icons/Icon";
 import { Button, type ButtonSize, type ButtonVariant } from "./Button";
 
 const variants: ButtonVariant[] = ["accent", "primary", "secondary", "destructive"];
 const sizes: ButtonSize[] = ["xs", "sm", "lg"];
-
-function ArrowLeftIcon() {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-      <path d="M19 12H5" />
-      <path d="m12 19-7-7 7-7" />
-    </svg>
-  );
-}
-
-function ArrowRightIcon() {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-      <path d="M5 12h14" />
-      <path d="m12 5 7 7-7 7" />
-    </svg>
-  );
-}
 
 function ButtonMatrix({
   children,
@@ -51,7 +36,11 @@ function ButtonMatrix({
               aria-label={iconOnly ? `${variant} ${size}` : undefined}
               disabled={disabled}
             >
-              {iconOnly ? <ArrowRightIcon /> : `${children} ${variant} ${size}`}
+              {iconOnly ? (
+                <Icon svg={arrowRightIcon} className="size-6" />
+              ) : (
+                `${children} ${variant} ${size}`
+              )}
             </Button>
           ))}
         </div>
@@ -93,16 +82,27 @@ export const TextOnly: Story = {
 };
 
 export const LeadingIcon: Story = {
-  render: () => <ButtonMatrix leadingIcon={<ArrowLeftIcon />}>Leading</ButtonMatrix>,
+  render: () => (
+    <ButtonMatrix leadingIcon={<Icon svg={arrowLeftIcon} className="size-6" />}>
+      Leading
+    </ButtonMatrix>
+  ),
 };
 
 export const TrailingIcon: Story = {
-  render: () => <ButtonMatrix trailingIcon={<ArrowRightIcon />}>Trailing</ButtonMatrix>,
+  render: () => (
+    <ButtonMatrix trailingIcon={<Icon svg={arrowRightIcon} className="size-6" />}>
+      Trailing
+    </ButtonMatrix>
+  ),
 };
 
 export const BothIcons: Story = {
   render: () => (
-    <ButtonMatrix leadingIcon={<ArrowLeftIcon />} trailingIcon={<ArrowRightIcon />}>
+    <ButtonMatrix
+      leadingIcon={<Icon svg={arrowLeftIcon} className="size-6" />}
+      trailingIcon={<Icon svg={arrowRightIcon} className="size-6" />}
+    >
       Both
     </ButtonMatrix>
   ),

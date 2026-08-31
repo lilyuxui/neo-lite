@@ -1,6 +1,7 @@
 import type { HTMLAttributes, ReactNode } from "react";
 
 import { cn } from "../../utils/cn";
+import { menuClassName } from "./styles";
 
 export interface MenuProps extends HTMLAttributes<HTMLDivElement> {
   children: ReactNode;
@@ -9,10 +10,7 @@ export interface MenuProps extends HTMLAttributes<HTMLDivElement> {
 export function Menu({ className, children, ...props }: MenuProps) {
   return (
     <div
-      className={cn(
-        "w-full rounded-sm border border-border bg-background p-2 shadow-sm",
-        className,
-      )}
+      className={cn(menuClassName, className)}
       {...props}
     >
       {children}

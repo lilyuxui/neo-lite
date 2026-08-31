@@ -1,23 +1,10 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
 
-import xIcon from "../../assets/icons/x.svg";
+import searchIcon from "../../assets/icons/search.svg?raw";
+import xIcon from "../../assets/icons/x.svg?raw";
+import { Icon } from "../../assets/icons/Icon";
 import { Input } from "./Input";
-
-function SearchIcon() {
-  return (
-    <svg
-      aria-hidden="true"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-    >
-      <circle cx="11" cy="11" r="7" />
-      <path d="m20 20-4-4" />
-    </svg>
-  );
-}
 
 function CommandKey() {
   return (
@@ -38,7 +25,7 @@ function SearchInputWithClear() {
       onChange={(event) => setSearch(event.target.value)}
       placeholder="Search components"
       className="[&::-webkit-search-cancel-button]:appearance-none"
-      leadingDecoration={<SearchIcon />}
+      leadingDecoration={<Icon svg={searchIcon} />}
       trailingDecoration={
         <button
           type="button"
@@ -46,7 +33,7 @@ function SearchInputWithClear() {
           className="grid size-4 place-items-center"
           onClick={() => setSearch("")}
         >
-          <img src={xIcon} alt="" aria-hidden="true" className="size-4" />
+          <Icon svg={xIcon} />
         </button>
       }
       hint="Search by component name."
@@ -92,7 +79,7 @@ export const WithDecorations: Story = {
       <Input
         label="Command"
         placeholder="Open command menu"
-        leadingDecoration={<SearchIcon />}
+        leadingDecoration={<Icon svg={searchIcon} />}
         trailingDecoration={<CommandKey />}
       />
     </div>
@@ -112,7 +99,7 @@ export const Error: Story = {
         label="Search"
         type="search"
         placeholder="Search components"
-        leadingDecoration={<SearchIcon />}
+        leadingDecoration={<Icon svg={searchIcon} />}
         error="No matching component was found."
       />
     </div>

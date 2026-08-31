@@ -24,9 +24,9 @@ const variantClasses: Record<ButtonVariant, string> = {
 };
 
 const sizeClasses: Record<ButtonSize, string> = {
-  xs: "h-[var(--button-height-xs)] px-2 gap-1 rounded-sm text-sm [&:has(>svg:only-child)]:w-[var(--button-height-xs)]",
-  sm: "h-[var(--button-height-sm)] px-3 gap-2 rounded-sm text-base [&:has(>svg:only-child)]:w-[var(--button-height-sm)]",
-  lg: "h-[var(--button-height-lg)] px-4 gap-3 rounded-sm text-xl [&:has(>svg:only-child)]:w-[var(--button-height-lg)]",
+  xs: "h-[var(--button-height-xs)] px-2 gap-1 rounded-sm text-sm [&:has(>svg:only-child)]:w-[var(--button-height-xs)] [&:has(>[data-neo-lite-icon]:only-child)]:w-[var(--button-height-xs)]",
+  sm: "h-[var(--button-height-sm)] px-3 gap-2 rounded-sm text-base [&:has(>svg:only-child)]:w-[var(--button-height-sm)] [&:has(>[data-neo-lite-icon]:only-child)]:w-[var(--button-height-sm)]",
+  lg: "h-[var(--button-height-lg)] px-4 gap-3 rounded-sm text-xl [&:has(>svg:only-child)]:w-[var(--button-height-lg)] [&:has(>[data-neo-lite-icon]:only-child)]:w-[var(--button-height-lg)]",
 };
 
 const iconClasses: Record<ButtonSize, string> = {
@@ -36,9 +36,9 @@ const iconClasses: Record<ButtonSize, string> = {
 };
 
 const iconSvgClasses: Record<ButtonSize, string> = {
-  xs: "[&_svg]:size-5",
-  sm: "[&_svg]:size-6",
-  lg: "[&_svg]:size-6",
+  xs: "[&_svg]:size-5 [&_[data-neo-lite-icon]]:size-5",
+  sm: "[&_svg]:size-6 [&_[data-neo-lite-icon]]:size-6",
+  lg: "[&_svg]:size-6 [&_[data-neo-lite-icon]]:size-6",
 };
 
 export function Button({
@@ -55,7 +55,7 @@ export function Button({
     <button
       type={type}
       className={cn(
-        "inline-flex items-center justify-center border font-sans font-normal leading-none transition-[background-color,box-shadow,transform] duration-[var(--duration)] ease-[var(--easing)] hover:translate-y-[var(--transform-hover-offset)] hover:shadow-md focus-visible:outline-none disabled:pointer-events-none disabled:opacity-[var(--disabled-opacity)] [&_svg]:shrink-0",
+        "inline-flex items-center justify-center border font-sans font-normal leading-none transition-[background-color,box-shadow,transform] duration-[var(--duration)] ease-[var(--easing)] hover:translate-y-[var(--transform-hover-offset)] hover:shadow-md focus-visible:outline-none disabled:pointer-events-none disabled:opacity-[var(--disabled-opacity)] [&_svg]:shrink-0 [&_[data-neo-lite-icon]]:shrink-0",
         sizeClasses[size],
         iconSvgClasses[size],
         variantClasses[variant],
