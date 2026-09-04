@@ -1,57 +1,61 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import type { ComponentProps } from "react";
 
+import verticalCardImage from "../../assets/images/image_vertical_card.png";
 import { Badge } from "../badge";
 import { Button } from "../button";
-import { Card, type CardOrientation } from "./Card";
+import { Card } from "./Card";
 
-const orientations: CardOrientation[] = ["vertical", "horizontal"];
+type CardStoryArgs = ComponentProps<typeof Card> & {
+  showImage: boolean;
+  showBadges: boolean;
+  showButtons: boolean;
+};
 
 function CardImage() {
   return (
-    <div className="grid size-full min-h-48 place-items-center bg-muted">
-      <div className="grid size-24 grid-cols-2 gap-2">
-        <div className="border border-border bg-accent" />
-        <div className="border border-border bg-background" />
-        <div className="border border-border bg-primary" />
-        <div className="border border-destructive-border bg-destructive" />
-      </div>
-    </div>
+    <img
+      src={verticalCardImage}
+      alt=""
+      className="size-full object-cover"
+    />
   );
 }
 
 function CardExample({
-  orientation = "vertical",
   title = "Neo-Lite Card",
   subtitle = "Component primitive",
+  showImage = true,
+  showBadges = true,
+  showButtons = true,
 }: {
-  orientation?: CardOrientation;
   title?: string;
   subtitle?: string;
+  showImage?: boolean;
+  showBadges?: boolean;
+  showButtons?: boolean;
 }) {
   return (
-    <div
-      className={
-        orientation === "horizontal"
-          ? "w-[min(100vw-32px,44rem)]"
-          : "w-[min(100vw-32px,24rem)]"
-      }
-    >
+    <div className="w-[min(100vw-32px,24rem)]">
       <Card
-        orientation={orientation}
-        image={<CardImage />}
+        image={showImage ? <CardImage /> : undefined}
         badges={
-          <>
-            <Badge variant="secondary">Badge</Badge>
-            <Badge variant="primary">Badge</Badge>
-          </>
+          showBadges ? (
+            <>
+              <Badge variant="secondary">Badge</Badge>
+              <Badge variant="primary">Badge</Badge>
+            </>
+          ) : undefined
         }
         subtitle={subtitle}
         title={title}
         footer={
-          <>
-            <Button variant="accent">Accent</Button>
-            <Button variant="primary">Primary</Button>
-          </>
+          showButtons ? (
+            <>
+              <Button variant="accent">Accent</Button>
+              <Button variant="primary">Primary</Button>
+            </>
+          ) : undefined
         }
       >
         A reusable content container with composed badges, body content, and
@@ -66,26 +70,39 @@ const meta = {
   component: Card,
   parameters: {
     layout: "centered",
+    controls: {
+      exclude: ["orientation"],
+    },
   },
   args: {
-    orientation: "vertical",
     title: "Neo-Lite Card",
     subtitle: "Component primitive",
+    showImage: true,
+    showBadges: true,
+    showButtons: true,
   },
   argTypes: {
-    orientation: {
-      control: "select",
-      options: orientations,
-    },
     image: {
       table: {
         disable: true,
       },
     },
+    showImage: {
+      control: "boolean",
+      name: "Show image",
+    },
     badges: {
       table: {
         disable: true,
       },
+    },
+    showBadges: {
+      control: "boolean",
+      name: "Show badges",
+    },
+    showButtons: {
+      control: "boolean",
+      name: "Show buttons",
     },
     children: {
       table: {
@@ -98,26 +115,25 @@ const meta = {
       },
     },
   },
-} satisfies Meta<typeof Card>;
+} satisfies Meta<CardStoryArgs>;
 
 export default meta;
 
-type Story = StoryObj<typeof meta>;
+type Story = StoryObj<CardStoryArgs>;
 
 export const Playground: Story = {
   render: (args) => (
     <CardExample
-      orientation={args.orientation}
       title={String(args.title)}
       subtitle={args.subtitle ? String(args.subtitle) : undefined}
+      showImage={args.showImage}
+      showBadges={args.showBadges}
+      showButtons={args.showButtons}
     />
   ),
 };
 
-export const Vertical: Story = {
-  render: () => <CardExample orientation="vertical" />,
-};
-
-export const Horizontal: Story = {
-  render: () => <CardExample orientation="horizontal" />,
+export const WithoutImage: Story = {
+  name: "Without image",
+  render: () => <CardExample showImage={false} />,
 };

@@ -2,11 +2,7 @@ import type { HTMLAttributes, ReactNode } from "react";
 
 import { cn } from "../../utils/cn";
 
-export type CardOrientation = "vertical" | "horizontal";
-
 export interface CardProps extends Omit<HTMLAttributes<HTMLDivElement>, "title"> {
-  orientation?: CardOrientation;
-
   image?: ReactNode;
   badges?: ReactNode;
 
@@ -17,13 +13,7 @@ export interface CardProps extends Omit<HTMLAttributes<HTMLDivElement>, "title">
   footer?: ReactNode;
 }
 
-const orientationClasses: Record<CardOrientation, string> = {
-  vertical: "flex-col",
-  horizontal: "flex-row",
-};
-
 export function Card({
-  orientation = "vertical",
   image,
   badges,
   subtitle,
@@ -33,8 +23,6 @@ export function Card({
   className,
   ...props
 }: CardProps) {
-  const isHorizontal = orientation === "horizontal";
-
   return (
     <div
       className={cn(
@@ -46,16 +34,14 @@ export function Card({
       <div
         className={cn(
           "flex w-full overflow-hidden rounded-sm border border-border bg-card text-card-foreground transition-[box-shadow,transform] duration-[var(--duration)] ease-[var(--easing)] group-hover/card:translate-y-[var(--transform-hover-offset)] group-hover/card:shadow-md motion-reduce:transition-none motion-reduce:group-hover/card:translate-y-0",
-          orientationClasses[orientation],
+          "flex-col",
         )}
       >
         {image ? (
           <div
             className={cn(
               "overflow-hidden bg-muted [&>img]:size-full [&>img]:object-cover",
-              isHorizontal
-                ? "min-h-full basis-[38.5%] shrink-0 border-r border-card-foreground"
-                : "aspect-[343/206] w-full border-b border-border",
+              "aspect-[343/206] w-full border-b border-border",
             )}
           >
             {image}
@@ -82,8 +68,8 @@ export function Card({
           {children ? (
             <div
               className={cn(
-                "w-full px-4 pt-2 font-sans text-base font-normal leading-[160%] text-card-foreground",
-                !isHorizontal && "flex-1",
+                "w-full px-4 pb-4 pt-2 font-sans text-base font-normal leading-[160%] text-card-foreground",
+                "flex-1",
               )}
             >
               {children}

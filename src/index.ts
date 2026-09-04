@@ -3,7 +3,7 @@ export type { BadgeProps, BadgeVariant } from "./components/badge";
 export { Button } from "./components/button";
 export type { ButtonProps, ButtonSize, ButtonVariant } from "./components/button";
 export { Card } from "./components/card";
-export type { CardOrientation, CardProps } from "./components/card";
+export type { CardProps } from "./components/card";
 export { Checkbox } from "./components/checkbox";
 export type { CheckboxProps } from "./components/checkbox";
 export { Dialog } from "./components/dialog";

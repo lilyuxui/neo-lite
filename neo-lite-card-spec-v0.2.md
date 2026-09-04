@@ -4,16 +4,14 @@
 
 `Card` is a reusable Neo-Lite content container for presenting an image, optional badges, subtitle, title, body content, and footer actions.
 
-The Figma component defines two orientations and their hover states:
+The Card component supports the vertical visual variant only:
 
 ```text
 Vertical
 Vertical-hover
-Horizontal
-Horizontal-hover
 ```
 
-React should expose orientation and semantic content slots rather than a Figma-style combined `variant` state.
+React should expose semantic content slots rather than a Figma-style combined `variant` state.
 
 ## 2. Figma Source
 
@@ -30,9 +28,7 @@ type FigmaCardProps = {
   image?: boolean;
   variant?:
     | "Vertical"
-    | "Horizontal"
-    | "Vertical-hover"
-    | "Horizontal-hover";
+    | "Vertical-hover";
 };
 ```
 
@@ -41,12 +37,8 @@ These should not map 1:1 to the public React API.
 ## 3. Recommended React API
 
 ```ts
-export type CardOrientation = "vertical" | "horizontal";
-
 export interface CardProps
   extends React.HTMLAttributes<HTMLDivElement> {
-  orientation?: CardOrientation;
-
   image?: React.ReactNode;
   badges?: React.ReactNode;
 
@@ -58,16 +50,13 @@ export interface CardProps
 }
 ```
 
-Recommended default:
-
-```ts
-orientation = "vertical";
-```
-
 Do not expose:
 
 ```text
 variant="Vertical-hover"
+variant="Horizontal"
+variant="Horizontal-hover"
+orientation
 hovered
 image=true/false
 badge
@@ -78,7 +67,7 @@ Hover is real interaction, not a public state prop.
 
 ## 4. Overall Visual Contract
 
-All orientations use:
+Card uses:
 
 ```text
 background: var(--card)
@@ -145,40 +134,6 @@ Card
 └── Footer
 ```
 
-## 6. Orientation: Horizontal
-
-Figma reference geometry:
-
-```text
-width: 555px
-```
-
-Image region:
-
-```text
-width: 214px
-height: full card height
-border-right: 1px solid var(--card-foreground)
-```
-
-Content region fills remaining width.
-
-Structure:
-
-```text
-Card
-├── Image
-└── Main
-    ├── Header
-    │   ├── Badges
-    │   ├── Subtitle
-    │   └── Title
-    ├── Content
-    └── Footer
-```
-
-Do not hard-code 555px or 214px in production. The horizontal Card should fill its parent width and keep its image/content proportions responsive.
-
 ## 7. Image Area
 
 Figma image wrapper uses:
@@ -197,15 +152,6 @@ border-bottom: 1px solid var(--border)
 ```
 
 The Figma reference is approximately 343px × 206px. Treat that as an aspect-ratio contract, not a fixed pixel size.
-
-Horizontal:
-
-```text
-image region: responsive
-border-right: 1px solid var(--card-foreground)
-```
-
-Do not use a fixed 214px width. Preserve a stable media proportion using responsive flex-basis/percentage sizing while the content region fills the remaining space.
 
 The actual illustration in Figma is example content, not part of the core Card API.
 
@@ -306,19 +252,14 @@ Content region:
 ```text
 padding-top: 8px
 padding-left/right: 16px
+padding-bottom: 16px
 width: 100%
 ```
 
-Vertical orientation:
+Content behavior:
 
 ```text
 flex-grow: 1
-```
-
-Horizontal orientation:
-
-```text
-content sizes naturally
 ```
 
 Body copy uses Neo-Lite paragraph style:
@@ -371,11 +312,10 @@ Do not duplicate Button styling inside Card.
 
 ## 14. Hover State
 
-Figma defines hover separately for each orientation:
+Figma defines a vertical hover state:
 
 ```text
 Vertical-hover
-Horizontal-hover
 ```
 
 The only inspected visual difference is:
@@ -435,15 +375,13 @@ Do not hard-code the Figma reference widths:
 
 ```text
 343px
-555px
-214px
 ```
 
 The parent controls the Card's available width.
 
-### Vertical image responsiveness
+### Image responsiveness
 
-The vertical image region scales with Card width while preserving:
+The image region scales with Card width while preserving:
 
 ```text
 aspect-ratio: 343 / 206
@@ -451,17 +389,7 @@ aspect-ratio: 343 / 206
 
 Do not use a fixed `height: 206px` in production.
 
-### Horizontal image responsiveness
-
-The horizontal image region should scale as the parent width changes.
-
-Do not use a fixed `width: 214px`.
-
-Use a responsive proportional layout, such as a stable flex-basis/percentage derived from the Figma composition, while allowing the content region to fill the remaining width.
-
 The media itself should preserve its intended aspect ratio with an aspect-ratio wrapper and appropriate object-fit behaviour.
-
-Do not automatically switch horizontal to vertical based on viewport width unless explicitly designed. Consumers choose the orientation responsively.
 
 ## 17. Radius
 
@@ -543,8 +471,7 @@ Recommended compact structure:
 Components
 └── Card
     ├── Playground
-    ├── Vertical
-    └── Horizontal
+    └── Without image
 ```
 
 ### Playground
@@ -552,9 +479,11 @@ Components
 Controls:
 
 ```text
-orientation
 title
 subtitle
+showImage
+showBadges
+showButtons
 ```
 
 Use real hover interaction.
@@ -570,13 +499,9 @@ footer Buttons
 
 using existing Neo-Lite components.
 
-### Vertical
+### Without image
 
-Reproduce the Figma vertical example.
-
-### Horizontal
-
-Reproduce the Figma horizontal example.
+Reproduce the vertical Card composition with the optional image slot omitted.
 
 Do not create separate hover stories.
 
@@ -586,7 +511,6 @@ Hover should be validated through real pointer interaction.
 
 ```tsx
 <Card
-  orientation="vertical"
   image={<ExampleImage />}
   badges={
     <>
@@ -609,8 +533,8 @@ Hover should be validated through real pointer interaction.
 
 ## 23. Acceptance Criteria
 
-1. Supports `vertical` and `horizontal` orientations.
-2. Default orientation is vertical.
+1. Supports the vertical Card variant only.
+2. Does not expose an orientation prop.
 3. Uses card background.
 4. Uses 1px border.
 5. Uses 4px radius.
@@ -625,13 +549,13 @@ Hover should be validated through real pointer interaction.
 14. Body uses Neo-Lite paragraph typography.
 15. Header uses 16px horizontal/top padding.
 16. Header gap is 8px.
-17. Content uses 8px top / 16px horizontal padding.
+17. Content uses 8px top / 16px horizontal / 16px bottom padding.
 18. Footer uses 16px padding.
 19. Footer gap is 8px.
 20. Existing Button is reusable in footer.
 21. Card root is responsive and fills its parent width.
-22. Vertical image uses aspect ratio 343 / 206 rather than fixed 206px height.
-23. Horizontal image region is proportional/responsive rather than fixed 214px.
+22. Image uses aspect ratio 343 / 206 rather than fixed 206px height.
+23. Horizontal Card variant is not exposed.
 24. Figma dimensions are reference-only, not universal production sizes.
 25. No public `image` boolean.
 26. No public Figma combined `variant` states.
