@@ -101,7 +101,7 @@ Tailwind shadow: enabled:enabled:hover:shadow-md
 Hover transform:
 
 ```txt
-translate(-4px, -4px)
+translateY(-4px)
 ```
 
 This movement must consume the Neo-Lite motion/transform token rather than hard-coding `-4px` in `Button.tsx`.
@@ -131,6 +131,11 @@ enabled:enabled:hover:bg-primary-hover
 ```
 
 Disabled Buttons must not move or receive hover shadow/background behaviour.
+
+The hover transform and shadow should be applied to a visual child inside the
+Button while the outer `<button>` remains the stable hit target, semantic
+element, focus target, and disabled-state owner. This prevents pointer
+enter/leave loops when the cursor is positioned on the button edge.
 
 Respect `prefers-reduced-motion`: remove the hover translation and transition when reduced motion is requested, while preserving clear interaction/focus feedback.
 
@@ -287,7 +292,7 @@ The intended interaction is:
 ```text
 default
 → hover:
-  translate(-4px, -4px)
+  translateY(-4px)
   + shadow-md
   + primary-hover background for Primary only
 

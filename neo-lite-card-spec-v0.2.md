@@ -98,6 +98,7 @@ Hover:
 ```text
 box-shadow-2
 4px 4px 0 0 var(--shadow-color)
+translateY(-4px)
 ```
 
 Use the existing Neo-Lite semantic mapping where available:
@@ -106,7 +107,9 @@ Use the existing Neo-Lite semantic mapping where available:
 hover:shadow-md
 ```
 
-Do not add Button-style translation/lift unless separately designed.
+The hover transform and shadow should be applied to a visual child inside the
+Card while the outer container remains the stable hover target. This prevents
+pointer enter/leave loops when the cursor is positioned on the card edge.
 
 ## 5. Orientation: Vertical
 
@@ -491,19 +494,34 @@ Do not hard-code raw shadow values if a semantic utility exists.
 
 ## 19. Motion
 
-Figma does not define Card translation or animation.
-
-Do not add:
+Card hover uses the same Neo-Lite Y-only hover lift as Button:
 
 ```text
-translate
-scale
-lift
-transition-all
-animated shadow movement
+translateY(-4px)
+duration: 150ms
+easing: ease-out
 ```
 
-Hover shadow may change immediately.
+The movement must consume the Neo-Lite motion/transform token rather than
+hard-coding `-4px` in `Card.tsx`.
+
+Animate only:
+
+```text
+transform
+box-shadow
+```
+
+Do not use:
+
+```text
+scale
+transition-all
+animated layout properties
+```
+
+Respect `prefers-reduced-motion`: remove the hover translation and transition
+when reduced motion is requested, while preserving the hover shadow.
 
 ## 20. Accessibility
 
@@ -598,7 +616,7 @@ Hover should be validated through real pointer interaction.
 5. Uses 4px radius.
 6. Uses `box-shadow-2` on real hover.
 7. No public hover-state prop.
-8. No Card lift/translation.
+8. Card hover uses Y-only translation on an inner visual child while the outer container remains the stable hover target.
 9. Image slot is optional.
 10. Badges slot is optional.
 11. Existing Badge component is reusable in header.

@@ -16,7 +16,7 @@ export interface BadgeProps extends HTMLAttributes<HTMLSpanElement> {
 const variantClasses: Record<BadgeVariant, string> = {
   accent: "border border-border bg-accent text-foreground",
   secondary: "border border-border bg-secondary text-foreground",
-  primary: "border-0 bg-primary text-primary-foreground",
+  primary: "border border-border bg-primary text-primary-foreground",
   destructive: "border border-destructive-border bg-destructive text-foreground",
 };
 

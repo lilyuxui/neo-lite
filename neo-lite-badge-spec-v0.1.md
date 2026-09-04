@@ -61,7 +61,7 @@ text/icon: var(--foreground)
 
 ```text
 background: var(--primary)
-border: none
+border: 1px solid var(--border)
 text/icon: var(--primary-foreground)
 ```
 
@@ -299,7 +299,7 @@ Use a stable project icon and demonstrate all variants with the same 16px leadin
 7. Width remains intrinsic.
 8. Accent uses accent background + border.
 9. Secondary uses secondary background + border.
-10. Primary uses primary background + primary foreground.
+10. Primary uses primary background + border + primary foreground.
 11. Destructive uses destructive background + destructive border.
 12. `leadingIcon` renders before children.
 13. Icon inherits current text colour where possible.

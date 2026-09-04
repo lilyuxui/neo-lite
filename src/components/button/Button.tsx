@@ -14,13 +14,20 @@ export type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
 
 const variantClasses: Record<ButtonVariant, string> = {
   accent:
-    "bg-accent text-accent-foreground border-border focus-visible:shadow-focus",
+    "bg-accent text-accent-foreground border-border",
   primary:
-    "bg-primary text-primary-foreground border-border hover:bg-primary-hover focus-visible:shadow-focus",
+    "bg-primary text-primary-foreground border-border group-hover/button:bg-primary-hover",
   secondary:
-    "bg-secondary text-secondary-foreground border-border focus-visible:shadow-focus",
+    "bg-secondary text-secondary-foreground border-border",
   destructive:
-    "bg-destructive text-destructive-foreground border-destructive-border focus-visible:shadow-destructive-focus",
+    "bg-destructive text-destructive-foreground border-destructive-border",
+};
+
+const focusClasses: Record<ButtonVariant, string> = {
+  accent: "focus-visible:shadow-focus",
+  primary: "focus-visible:shadow-focus",
+  secondary: "focus-visible:shadow-focus",
+  destructive: "focus-visible:shadow-destructive-focus",
 };
 
 const sizeClasses: Record<ButtonSize, string> = {
@@ -55,31 +62,38 @@ export function Button({
     <button
       type={type}
       className={cn(
-        "inline-flex items-center justify-center border font-sans font-normal leading-none transition-[background-color,box-shadow,transform] duration-[var(--duration)] ease-[var(--easing)] hover:translate-y-[var(--transform-hover-offset)] hover:shadow-md focus-visible:outline-none disabled:pointer-events-none disabled:opacity-[var(--disabled-opacity)] [&_svg]:shrink-0 [&_[data-neo-lite-icon]]:shrink-0",
-        sizeClasses[size],
-        iconSvgClasses[size],
-        variantClasses[variant],
+        "group/button inline-flex w-fit rounded-sm focus-visible:outline-none disabled:pointer-events-none disabled:opacity-[var(--disabled-opacity)]",
+        focusClasses[variant],
         className,
       )}
       {...props}
     >
-      {leadingIcon ? (
-        <span
-          aria-hidden="true"
-          className={cn("inline-flex items-center justify-center", iconClasses[size])}
-        >
-          {leadingIcon}
-        </span>
-      ) : null}
-      {children}
-      {trailingIcon ? (
-        <span
-          aria-hidden="true"
-          className={cn("inline-flex items-center justify-center", iconClasses[size])}
-        >
-          {trailingIcon}
-        </span>
-      ) : null}
+      <span
+        className={cn(
+          "pointer-events-none inline-flex items-center justify-center border font-sans font-normal leading-none transition-[background-color,box-shadow,transform] duration-[var(--duration)] ease-[var(--easing)] group-hover/button:translate-y-[var(--transform-hover-offset)] group-hover/button:shadow-md motion-reduce:transition-none motion-reduce:group-hover/button:translate-y-0 [&_svg]:shrink-0 [&_[data-neo-lite-icon]]:shrink-0",
+          sizeClasses[size],
+          iconSvgClasses[size],
+          variantClasses[variant],
+        )}
+      >
+        {leadingIcon ? (
+          <span
+            aria-hidden="true"
+            className={cn("inline-flex items-center justify-center", iconClasses[size])}
+          >
+            {leadingIcon}
+          </span>
+        ) : null}
+        {children}
+        {trailingIcon ? (
+          <span
+            aria-hidden="true"
+            className={cn("inline-flex items-center justify-center", iconClasses[size])}
+          >
+            {trailingIcon}
+          </span>
+        ) : null}
+      </span>
     </button>
   );
 }
