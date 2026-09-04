@@ -27,14 +27,16 @@ function SearchInputWithClear() {
       className="[&::-webkit-search-cancel-button]:appearance-none"
       leadingDecoration={<Icon svg={searchIcon} />}
       trailingDecoration={
-        <button
-          type="button"
-          aria-label="Clear search"
-          className="grid size-4 place-items-center"
-          onClick={() => setSearch("")}
-        >
-          <Icon svg={xIcon} />
-        </button>
+        search ? (
+          <button
+            type="button"
+            aria-label="Clear search"
+            className="inline-flex size-4 shrink-0 items-center justify-center rounded-full border-2 border-transparent p-0 text-foreground outline-none transition-[background-color,border-color] duration-[var(--duration)] ease-[var(--easing)] hover:bg-hover focus-visible:border-focus-ring focus-visible:hover:bg-hover [&_[data-neo-lite-icon]]:size-4"
+            onClick={() => setSearch("")}
+          >
+            <Icon svg={xIcon} />
+          </button>
+        ) : undefined
       }
       hint="Search by component name."
     />

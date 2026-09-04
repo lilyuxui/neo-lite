@@ -131,12 +131,14 @@ shadow-sm
 Checked / indeterminate focus combines both:
 
 ```text
-3px hard shadow
-+
 2px focus ring
++
+3px hard shadow
 ```
 
-Do not replace the hard shadow when adding focus.
+Do not replace the hard shadow when adding focus. The focus ring must be listed
+first in the combined `box-shadow` value so it paints above the selected hard
+shadow.
 
 ## 7. States
 
@@ -608,9 +610,9 @@ box-shadow-1
 3px 3px 0 0 shadow-color
 
 box-shadow-1-focus
-3px 3px 0 0 shadow-color
-+
 0 0 0 2px focus-ring
++
+3px 3px 0 0 shadow-color
 ```
 
 Use existing Neo-Lite semantic CSS tokens and Tailwind bridge rather than raw values.
