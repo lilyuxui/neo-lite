@@ -33,6 +33,21 @@
   --purple-700: #5b5cce;
   --purple-100: #dfdffe;
 
+  /* Blue */
+
+  --blue-700: #2883d4;
+  --blue-100: #dff0ff;
+
+  /* Green */
+
+  --green-700: #18c0a2;
+  --green-100: #d7f3ee;
+
+  /* Yellow */
+
+  --yellow-700: #daa015;
+  --yellow-100: #ffecbf;
+
   /* Red */
 
   --red-800: #9c050e;
@@ -111,6 +126,18 @@
 
   --accent: var(--purple-100);
   --accent-foreground: var(--neutral-950);
+
+  --info: var(--blue-100);
+  --info-foreground: var(--neutral-950);
+  --info-border: var(--blue-700);
+
+  --success: var(--green-100);
+  --success-foreground: var(--neutral-950);
+  --success-border: var(--green-700);
+
+  --warning: var(--yellow-100);
+  --warning-foreground: var(--neutral-950);
+  --warning-border: var(--yellow-700);
 
   --destructive: var(--red-100);
   --destructive-foreground: var(--neutral-950);
@@ -212,6 +239,21 @@
   --color-accent: var(--accent);
   --color-accent-foreground:
     var(--accent-foreground);
+
+  --color-info: var(--info);
+  --color-info-foreground:
+    var(--info-foreground);
+  --color-info-border: var(--info-border);
+
+  --color-success: var(--success);
+  --color-success-foreground:
+    var(--success-foreground);
+  --color-success-border: var(--success-border);
+
+  --color-warning: var(--warning);
+  --color-warning-foreground:
+    var(--warning-foreground);
+  --color-warning-border: var(--warning-border);
 
   --color-destructive: var(--destructive);
   --color-destructive-foreground:

@@ -1,0 +1,10 @@
+node_modules
+storybook-static
+.storybook-home
+.storybook
+.vscode
+.DS_Store
+dist
+
+src/**/*.stories.tsx
+src/assets/images/image_horizontal_card.png

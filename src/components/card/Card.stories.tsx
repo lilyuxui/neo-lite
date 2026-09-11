@@ -70,9 +70,6 @@ const meta = {
   component: Card,
   parameters: {
     layout: "centered",
-    controls: {
-      exclude: ["orientation"],
-    },
   },
   args: {
     title: "Neo-Lite Card",
