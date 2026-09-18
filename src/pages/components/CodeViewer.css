@@ -1,0 +1,17 @@
+.neo-code-viewer pre {
+  margin: 0;
+  overflow-x: auto;
+  background: var(--muted) !important;
+  color: var(--foreground);
+  padding: 13px 56px 13px 24px;
+  font-family: var(--font-family-sans);
+  font-size: 16px;
+  font-weight: 300;
+  line-height: 1.6;
+  tab-size: 2;
+}
+
+.neo-code-viewer code {
+  display: block;
+  min-width: max-content;
+}
