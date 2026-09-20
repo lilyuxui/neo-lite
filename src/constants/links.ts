@@ -1,4 +1,4 @@
 export const FIGMA_COMMUNITY_URL =
   "https://www.figma.com/community/file/1683319542113903903";
 
-export const STORYBOOK_PATH = "/storybook";
+export const STORYBOOK_PATH = "/storybook/";
