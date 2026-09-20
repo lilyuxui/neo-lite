@@ -3,7 +3,11 @@ import { useEffect, useState, type ReactNode } from "react";
 import heroImage from "../../assets/overview/hero.png";
 import { Icon } from "../../assets/icons/Icon";
 import { Button } from "../../components/button";
-import { FIGMA_COMMUNITY_URL, STORYBOOK_PATH } from "../../constants/links";
+import {
+  FIGMA_COMMUNITY_URL,
+  GITHUB_REPOSITORY_URL,
+  STORYBOOK_PATH,
+} from "../../constants/links";
 import { cn } from "../../utils/cn";
 import { Footer, Header } from "../home/HomePage";
 
@@ -219,7 +223,7 @@ function Explore() {
           variant="secondary"
           size="xs"
           leadingIcon={<Icon name="storybook" />}
-          onClick={() => window.location.assign(STORYBOOK_PATH)}
+          onClick={() => window.open(STORYBOOK_PATH, "_blank", "noopener,noreferrer")}
         >
           Playground
         </Button>
@@ -231,7 +235,14 @@ function Explore() {
         >
           Figma
         </Button>
-        <Button variant="primary" size="xs" leadingIcon={<Icon name="github" />}>Github</Button>
+        <Button
+          variant="primary"
+          size="xs"
+          leadingIcon={<Icon name="github" />}
+          onClick={() => window.open(GITHUB_REPOSITORY_URL, "_blank", "noopener,noreferrer")}
+        >
+          Github
+        </Button>
       </div>
     </PageBand>
   );
