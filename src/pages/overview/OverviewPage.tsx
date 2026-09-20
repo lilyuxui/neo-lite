@@ -3,7 +3,7 @@ import { useEffect, useState, type ReactNode } from "react";
 import heroImage from "../../assets/overview/hero.png";
 import { Icon } from "../../assets/icons/Icon";
 import { Button } from "../../components/button";
-import { FIGMA_COMMUNITY_URL } from "../../constants/links";
+import { FIGMA_COMMUNITY_URL, STORYBOOK_PATH } from "../../constants/links";
 import { cn } from "../../utils/cn";
 import { Footer, Header } from "../home/HomePage";
 
@@ -215,7 +215,14 @@ function Explore() {
     <PageBand className="flex flex-col items-center gap-6 px-4 pb-[60px] pt-10 sm:px-6 lg:gap-12 lg:px-6 lg:pb-[120px] lg:pt-20">
       <div className="text-center"><SectionHeading label="EXPLORE" title="Fully documented open resources." /></div>
       <div className="flex flex-wrap justify-center gap-4">
-        <Button variant="secondary" size="xs" leadingIcon={<Icon name="storybook" />}>Playground</Button>
+        <Button
+          variant="secondary"
+          size="xs"
+          leadingIcon={<Icon name="storybook" />}
+          onClick={() => window.location.assign(STORYBOOK_PATH)}
+        >
+          Playground
+        </Button>
         <Button
           variant="accent"
           size="xs"

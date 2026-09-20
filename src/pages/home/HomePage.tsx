@@ -17,7 +17,7 @@ import { Button } from "../../components/button";
 import { Card } from "../../components/card";
 import { Checkbox } from "../../components/checkbox";
 import { Input } from "../../components/input";
-import { FIGMA_COMMUNITY_URL } from "../../constants/links";
+import { FIGMA_COMMUNITY_URL, STORYBOOK_PATH } from "../../constants/links";
 import { cn } from "../../utils/cn";
 
 type IconImageProps = {
@@ -294,6 +294,7 @@ function Hero() {
             <Button
               variant="secondary"
               size="xs"
+              onClick={() => window.location.assign(STORYBOOK_PATH)}
               className="lg:[&>span]:h-[50px] lg:[&>span]:px-3 lg:[&>span]:text-base"
               leadingIcon={<Icon name="storybook" />}
               trailingIcon={<Icon name="arrow-right" />}
@@ -502,7 +503,12 @@ function Resources() {
       <div className="flex flex-col items-center gap-6 lg:gap-12">
         <Section label="EXPLORE" title="Fully documented open resources." centered />
         <div className="flex flex-wrap justify-center gap-4 lg:gap-4">
-          <Button variant="secondary" size="xs" leadingIcon={<Icon name="storybook" />}>
+          <Button
+            variant="secondary"
+            size="xs"
+            leadingIcon={<Icon name="storybook" />}
+            onClick={() => window.location.assign(STORYBOOK_PATH)}
+          >
             Playground
           </Button>
           <Button

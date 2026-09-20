@@ -2,7 +2,7 @@
 
 Neo-Lite UI is a small, opinionated React component library and documentation website with a lightweight neo-brutalist visual language.
 
-The system is designed in Figma, translated into component specifications, and implemented as accessible React, TypeScript, and Tailwind CSS v4 components. The public website presents the foundations and component examples, while Storybook remains a separate development environment for component testing.
+The system is designed in Figma, translated into component specifications, and implemented as accessible React, TypeScript, and Tailwind CSS v4 components. The public website presents the foundations and component examples. Its production deployment also serves the component Storybook at `/storybook`.
 
 ## Design
 
@@ -88,6 +88,9 @@ Storybook runs separately at `http://localhost:6006`. It is the component labora
 | --- | --- |
 | `npm run dev` | Start the standalone Neo-Lite website with Vite |
 | `npm run build` | Create a production website build in `dist` |
+| `npm run build:site` | Create only the documentation website build |
+| `npm run build:package` | Compile the npm package into `package-dist` |
+| `npm run build:vercel` | Build the website and place Storybook at `dist/storybook` |
 | `npm run typecheck` | Run TypeScript without emitting files |
 | `npm run storybook` | Start the Storybook development server on port 6006 |
 | `npm run build-storybook` | Generate a static Storybook build |
@@ -97,8 +100,8 @@ Storybook runs separately at `http://localhost:6006`. It is the component labora
 Import components from the package entry point and include the Neo-Lite theme once in the consuming application.
 
 ```tsx
-import { Badge, Button, Card } from "neo-lite-ui";
-import "neo-lite-ui/styles/theme.css";
+import { Badge, Button, Card } from "neo-lite";
+import "neo-lite/styles.css";
 
 export function Example() {
   return (
@@ -113,7 +116,11 @@ export function Example() {
 }
 ```
 
-The package is currently marked `private`, so the example above describes the intended public API for workspace or future packaged use. It is not currently published to npm.
+Install the public package from npm:
+
+```bash
+npm install neo-lite
+```
 
 ### Public Components
 
@@ -164,9 +171,14 @@ Do not introduce hard-coded visual values when an existing Neo-Lite token repres
 |   |-- utils/              Shared implementation utilities
 |   |-- index.ts            Public component exports
 |   `-- main.tsx            Website entry point and route selection
+|-- package-dist/           Generated npm package artifacts
+|-- dist/                   Generated Vercel website and hosted Storybook
 |-- neo-lite-*-spec-v0.1.md Component specifications
 |-- package.json
+|-- tsconfig.build.json     Package declaration build configuration
 |-- tsconfig.json
+|-- vercel.json             Vercel build and route configuration
+|-- vite.lib.config.ts      npm library build configuration
 `-- vite.config.ts
 ```
 
@@ -199,7 +211,7 @@ The website uses a mobile-first responsive strategy:
 
 The mobile and desktop Figma frames are visual anchors. Layouts remain fluid between those anchors and content is constrained at wide viewport sizes.
 
-For a production static deployment, configure the host to serve `index.html` as the fallback for routes such as `/overview` and `/components/badge`.
+The Vercel configuration serves existing static files first and falls back to `index.html` for routes such as `/overview` and `/components/badge`.
 
 ## Storybook Workflow
 
@@ -215,6 +227,40 @@ Use stories to cover:
 - long content and layout stress cases
 
 Do not put Storybook-only behavior inside production components.
+
+The production Vercel build writes Storybook to `dist/storybook`, making it available from the website at `/storybook`. The local Storybook development server remains independent at `http://localhost:6006`.
+
+## Deployment
+
+Connect this repository to a Vercel project. The checked-in `vercel.json` runs `npm run build:vercel` and deploys `dist`, which contains both the website and the static Storybook build.
+
+Before deploying, verify the combined output locally:
+
+```bash
+npm run build:vercel
+```
+
+Vercel preview deployments should be checked at `/`, `/overview`, `/components/badge`, and `/storybook` before promoting a release to production.
+
+## Package Publishing
+
+The npm package build is intentionally separate from the website build:
+
+```bash
+npm run build:package
+npm pack --dry-run
+```
+
+`package-dist` contains the compiled ESM bundle, TypeScript declarations, declaration maps, and `neo-lite.css`. React and React DOM remain peer dependencies and are not bundled. Website pages, Storybook, specifications, and documentation assets are excluded by the package `files` allowlist.
+
+Before publishing a new release:
+
+1. Choose a project license, add a root `LICENSE` file, and add the matching `license` field to `package.json`.
+2. Update the package version.
+3. Test the generated tarball in a clean React project.
+4. Sign in to npm and run `npm publish`.
+
+The `prepack` script runs typechecking and rebuilds the package automatically before npm creates or publishes a tarball.
 
 ## Component Specifications
 
@@ -287,4 +333,4 @@ Before considering a change complete:
 
 ## Project Status
 
-Neo-Lite UI is a public repository under active development. The package is not currently published to npm, and its API and documentation may evolve as components are refined against Figma and exercised in Storybook.
+Neo-Lite UI is a public repository under active development. The website is configured for Vercel deployment, and `neo-lite@0.1.0` is publicly available from npm. APIs and documentation may evolve as components are refined against Figma and exercised in Storybook.

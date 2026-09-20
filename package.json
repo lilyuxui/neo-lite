@@ -1,24 +1,52 @@
 {
-  "name": "neo-lite-ui",
+  "name": "neo-lite",
   "version": "0.1.0",
-  "private": true,
+  "description": "Accessible React components with a lightweight neo-brutalist visual language.",
   "type": "module",
+  "files": [
+    "package-dist"
+  ],
   "sideEffects": [
     "**/*.css"
   ],
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "npm run build:site",
+    "build:site": "vite build",
+    "build:package": "vite build --config vite.lib.config.ts && tsc -p tsconfig.build.json",
+    "build:vercel": "npm run build:site && HOME=.storybook-home STORYBOOK_DISABLE_TELEMETRY=1 storybook build --output-dir dist/storybook",
     "typecheck": "tsc --noEmit",
     "storybook": "HOME=.storybook-home STORYBOOK_DISABLE_TELEMETRY=1 storybook dev -p 6006",
-    "build-storybook": "HOME=.storybook-home STORYBOOK_DISABLE_TELEMETRY=1 storybook build"
+    "build-storybook": "HOME=.storybook-home STORYBOOK_DISABLE_TELEMETRY=1 storybook build",
+    "prepack": "npm run typecheck && npm run build:package"
   },
+  "main": "./package-dist/index.js",
+  "module": "./package-dist/index.js",
+  "types": "./package-dist/index.d.ts",
   "exports": {
     ".": {
-      "types": "./src/index.ts",
-      "import": "./src/index.ts"
+      "types": "./package-dist/index.d.ts",
+      "import": "./package-dist/index.js"
     },
-    "./styles/theme.css": "./src/styles/theme.css"
+    "./styles.css": "./package-dist/neo-lite.css"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lilyuxui/neo-lite.git"
+  },
+  "homepage": "https://github.com/lilyuxui/neo-lite#readme",
+  "bugs": {
+    "url": "https://github.com/lilyuxui/neo-lite/issues"
+  },
+  "keywords": [
+    "react",
+    "components",
+    "design-system",
+    "neo-brutalism",
+    "typescript"
+  ],
+  "publishConfig": {
+    "access": "public"
   },
   "peerDependencies": {
     "react": ">=18",
@@ -32,12 +60,10 @@
     "@vitejs/plugin-react": "^4.7.0",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
+    "shiki": "^4.4.3",
     "storybook": "^9.1.20",
     "tailwindcss": "^4.3.3",
     "typescript": "^5.9.3",
     "vite": "^6.4.3"
-  },
-  "dependencies": {
-    "shiki": "^4.4.3"
   }
 }

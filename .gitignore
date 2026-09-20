@@ -2,4 +2,5 @@ node_modules
 storybook-static
 .storybook-home
 dist
+package-dist
 .DS_Store
