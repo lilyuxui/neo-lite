@@ -1,4 +1,4 @@
-# Neo-Lite Selection Component Specification v0.3
+# Neo-Lite Selection Component Specification v0.1
 
 ## 1. Purpose
 
@@ -418,7 +418,7 @@ The standalone MenuItem design includes a disabled state using:
 opacity: var(--disabled-opacity)
 ```
 
-Therefore Selection options may support per-option disabled state in v0.2.
+Selection options support a per-option disabled state in v0.1.
 
 ## 12. Menu Positioning
 
@@ -436,7 +436,7 @@ Do not add a dependency without a demonstrated need.
 
 Selection should work from option data rather than requiring consumers to manually construct Menu/MenuItem nodes.
 
-The standalone MenuItem design now establishes a disabled item state, so the v0.2 option model may include:
+The standalone MenuItem design establishes a disabled item state, so the v0.1 option model includes:
 
 ```ts
 export interface SelectionOption {

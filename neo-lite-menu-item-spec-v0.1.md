@@ -4,29 +4,32 @@
 
 `MenuItem` is the Neo-Lite interactive item primitive used inside Menu surfaces.
 
-This specification translates the Figma Menu Item component into a semantic React API without exposing Figma-only visual state props.
+This specification includes support for an optional leading decoration/icon while preserving the existing visual states and interaction model.
 
 ## 2. Figma Source
 
 - File: `Neo-Lite UI Kit`
 - File key: `VBhHP72Ge5M22csfOgeXt6`
 - Component set node: `2025:10723`
+- Selected-with-check usage example: `2077:360`
 
-Figma authoring property:
+Updated Figma authoring props:
 
 ```ts
 type FigmaMenuItemProps = {
+  showLeftDecoration?: boolean;
   state?: "Default" | "Hover" | "Focus" | "Disabled" | "Selected";
 };
 ```
 
-Figma default:
+Figma defaults:
 
 ```ts
+showLeftDecoration = false;
 state = "Default";
 ```
 
-Do not expose this `state` prop in React.
+Do not expose Figma `state` or `showLeftDecoration` directly in React.
 
 ## 3. Typography
 
@@ -47,13 +50,32 @@ min-height: 36px
 width: 100%
 padding-x: spacing/3 = 12px
 padding-y: spacing/2 = 8px
-gap: spacing/3 = 12px
+gap: spacing/2 = 8px
 border-radius: radius/sm = 4px
 ```
 
-Figma preview width is `236px`; this is not a production component contract.
+The updated Figma component changes the content gap to 8px.
 
-## 5. Color Tokens
+Do not hard-code the Figma preview width of 236px.
+
+## 5. Leading Decoration Geometry
+
+When present:
+
+```text
+decoration container width: 20px
+icon/content target: 16 × 16px
+internal padding: 2px
+gap to label: 8px
+```
+
+The decoration must not change the MenuItem minimum height.
+
+Figma uses a 16px icon inside the 20px decoration area.
+
+## 6. Color Tokens
+
+Use existing semantic tokens:
 
 ```text
 foreground              #000000
@@ -65,15 +87,16 @@ focus-ring              #5b5cce
 disabled-opacity        30%
 ```
 
-Use semantic tokens rather than raw values.
+Do not hard-code state colors in `MenuItem.tsx`.
 
-## 6. States
+## 7. States
 
 ### Default
 
 ```text
 background: background
 text: foreground
+decoration: foreground/currentColor
 ```
 
 ### Hover
@@ -81,9 +104,10 @@ text: foreground
 ```text
 background: hover
 text: foreground
+decoration: foreground/currentColor
 ```
 
-This should come from real pointer hover.
+Use real pointer hover.
 
 ### Focus
 
@@ -91,6 +115,7 @@ This should come from real pointer hover.
 background: background
 text: foreground
 focus ring: 0 0 0 2px var(--focus-ring)
+decoration: foreground/currentColor
 ```
 
 Use real `:focus-visible`.
@@ -100,7 +125,12 @@ Use real `:focus-visible`.
 ```text
 background: selected
 text: selected-foreground
+decoration: selected-foreground/currentColor
 ```
+
+The selected example at Figma node `2077:360` shows a leading check icon.
+
+The check icon is an example of using the decoration slot; it is not automatically injected by MenuItem.
 
 ### Disabled
 
@@ -110,28 +140,25 @@ text: foreground
 opacity: var(--disabled-opacity)
 ```
 
-Disabled must not be interactive.
+Disabled must not activate or receive hover styling.
 
-## 7. Recommended React API
-
-The base MenuItem should remain behavioural-context agnostic.
-
-Recommended API:
+## 8. Recommended React API
 
 ```ts
 export interface MenuItemProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   selected?: boolean;
+  leadingDecoration?: React.ReactNode;
 }
 ```
 
-Render a real button by default:
+Render a real:
 
 ```html
 <button type="button">
 ```
 
-Native `disabled` comes from `ButtonHTMLAttributes`.
+by default.
 
 Recommended defaults:
 
@@ -144,41 +171,116 @@ Do not add:
 
 ```text
 state
+variant
 isHovered
 isFocused
 isDisabled
-variant
+showLeftDecoration
+leftIconName
+iconType
 ```
 
-## 8. Why a Button Primitive
+The presence of `leadingDecoration` determines whether the decoration is shown.
 
-The Figma Menu Item is interactive.
+## 9. Leading Decoration Slot
 
-A native `<button>` provides:
+Expose:
+
+```ts
+leadingDecoration?: React.ReactNode;
+```
+
+Render it before the label.
+
+Example:
+
+```tsx
+<MenuItem leadingDecoration={<Icon aria-hidden />}>
+  Label
+</MenuItem>
+```
+
+The component owns the geometry:
 
 ```text
-keyboard focus
-Enter / Space activation
-disabled semantics
-accessible name
-native click behaviour
+20px decoration area
+16px visual target
+2px internal padding
+8px gap to label
 ```
 
-For Selection/listbox usage, the higher-level Selection implementation may need different option semantics depending on the accessibility primitive chosen.
+Consumers provide the actual decoration content.
 
-If Selection uses a trusted listbox/select primitive, adapt or wrap the MenuItem visual styles onto that primitive rather than forcing an actual `<button>` inside an ARIA listbox.
+## 10. Selected Check Example
 
-The visual contract belongs to MenuItem; the exact semantic element may be supplied by the higher-level accessible primitive.
+The updated Figma usage example shows:
 
-## 9. Selected State
+```text
+Selected MenuItem
+├── check icon
+└── Label
+```
+
+Expected React usage:
+
+```tsx
+<MenuItem
+  selected
+  leadingDecoration={<CheckIcon aria-hidden />}
+>
+  Label
+</MenuItem>
+```
+
+Important:
+
+- `selected` does not automatically render a check icon.
+- Parent components such as Selection decide whether selected items should include a check.
+- This keeps MenuItem reusable for selected states where no icon is desired.
+
+## 11. Decoration Colour
+
+The decoration should inherit the item's current foreground wherever possible.
+
+Prefer icon components that use:
+
+```css
+currentColor
+```
+
+Expected inheritance:
+
+```text
+Default / Hover / Focus / Disabled
+→ foreground
+
+Selected
+→ selected-foreground
+```
+
+Do not hard-code icon fill/stroke to black or white inside MenuItem.
+
+## 12. Decoration Accessibility
+
+Do not automatically force arbitrary decoration content to `aria-hidden`.
+
+For decorative icons, consumer usage should be:
+
+```tsx
+<CheckIcon aria-hidden />
+```
+
+If the decoration conveys unique information not already communicated by the item label or selected semantics, the consumer remains responsible for making it accessible.
+
+The decoration must not become a separate interactive target.
+
+## 13. Selected State
 
 Expose:
 
 ```ts
 selected?: boolean;
 ```
-
-This maps to the Figma Selected visual state.
 
 When selected:
 
@@ -187,11 +289,11 @@ background: var(--selected)
 color: var(--selected-foreground)
 ```
 
-If used in an accessibility pattern that supports it, the controlling component should also expose the corresponding selected semantic state such as `aria-selected`.
+If used in an accessibility pattern such as Selection/listbox, the controlling parent should expose the appropriate semantic selected state, such as `aria-selected`.
 
-Do not have the visual primitive guess the entire parent selection model.
+Do not have standalone MenuItem guess the parent selection model.
 
-## 10. Disabled
+## 14. Disabled
 
 Use native:
 
@@ -203,9 +305,15 @@ when rendered as a button.
 
 Apply whole-item 30% opacity.
 
-Disabled should not receive hover styling and should not activate.
+Disabled should not:
 
-## 11. Hover
+- activate
+- receive hover styling
+- receive interactive focus styling
+
+Do not add `isDisabled`.
+
+## 15. Hover
 
 Use real hover:
 
@@ -217,7 +325,7 @@ Do not expose `state="Hover"`.
 
 Disabled hover must not override disabled appearance.
 
-## 12. Focus
+## 16. Focus
 
 Use `:focus-visible`.
 
@@ -231,7 +339,7 @@ Do not clip the outer focus ring.
 
 Do not expose `state="Focus"`.
 
-## 13. Width and Layout
+## 17. Width and Layout
 
 Production MenuItem should fill its Menu container:
 
@@ -239,36 +347,33 @@ Production MenuItem should fill its Menu container:
 width: 100%
 ```
 
-Do not hard-code Figma's `236px`.
+Text should flex to use remaining space.
 
-Text should align consistently and occupy available width.
+Leading decoration should remain fixed at its 20px geometry.
 
-## 14. Motion
+Do not hard-code 236px.
 
-No Menu Item animation is defined in Figma.
+## 18. Motion
 
-Do not copy Button lift/motion.
+No Menu Item motion is defined in Figma.
 
-For v0.1:
+Do not add Button-style lift or translation.
 
-```text
-no translate
-no hard hover shadow
-no transition-all
-```
+## 19. Storybook
 
-## 15. Storybook
-
-Recommended compact stories:
+Recommended compact structure:
 
 ```text
 Components
 └── Menu Item
     ├── Playground
+    ├── With Decoration
     └── Selected
 ```
 
-Playground controls may include:
+### Playground
+
+Controls:
 
 ```text
 children
@@ -276,11 +381,61 @@ disabled
 selected
 ```
 
-Hover and focus should use real interaction, not fake public state props.
+Use real hover and focus interaction.
 
-## 16. Accessibility
+Do not expose arbitrary ReactNode decoration through a text control.
 
-When used standalone as a button:
+### With Decoration
+
+Example:
+
+```tsx
+<MenuItem leadingDecoration={<ExampleIcon aria-hidden />}>
+  Label
+</MenuItem>
+```
+
+Use an existing stable project icon.
+
+### Selected
+
+Demonstrate the Figma usage:
+
+```tsx
+<MenuItem
+  selected
+  leadingDecoration={<CheckIcon aria-hidden />}
+>
+  Label
+</MenuItem>
+```
+
+Verify that the icon inherits `selected-foreground`.
+
+## 20. Selection Integration
+
+Selection may use the leading decoration slot to show a check icon for the selected option.
+
+Conceptually:
+
+```tsx
+<MenuItem
+  selected={isSelected}
+  leadingDecoration={
+    isSelected ? <CheckIcon aria-hidden /> : undefined
+  }
+>
+  {option.label}
+</MenuItem>
+```
+
+However, if Selection uses a listbox/select primitive that does not literally render the standalone MenuItem button, reuse the MenuItem visual contract and leading-decoration geometry on that primitive.
+
+Accessibility semantics take priority over mechanically reusing the button DOM element.
+
+## 21. Accessibility
+
+When used standalone:
 
 1. Render a real button.
 2. Default to `type="button"`.
@@ -288,31 +443,44 @@ When used standalone as a button:
 4. Support native disabled.
 5. Preserve ARIA/data props.
 6. Use `:focus-visible`.
-7. Selected styling must not rely only on colour when the parent interaction pattern requires a semantic selected state.
+7. Preserve `leadingDecoration`.
+8. Decorative icons should be hidden from assistive technology by the consumer.
+9. Decoration must not be separately interactive.
+10. Parent interaction patterns remain responsible for selected semantics.
 
-When used inside Selection/listbox, let the higher-level accessible primitive provide correct option semantics.
-
-## 17. Acceptance Criteria
+## 22. Acceptance Criteria
 
 1. Minimum height is 36px.
 2. Horizontal padding is 12px.
 3. Vertical padding is 8px.
-4. Radius is 4px.
-5. Typography uses Neo-Lite `small`.
-6. Default matches Figma.
-7. Hover uses `--hover`.
-8. Focus uses standard 2px focus ring.
-9. Selected uses `--selected` / `--selected-foreground`.
-10. Disabled uses 30% opacity.
-11. Disabled does not hover/activate.
-12. No public Figma `state` prop.
-13. Width is not hard-coded to 236px.
-14. No Button-style motion.
-15. No unnecessary dependency.
+4. Content gap is 8px.
+5. Radius is 4px.
+6. Typography uses Neo-Lite `small`.
+7. Default matches Figma.
+8. Hover uses `--hover`.
+9. Focus uses standard 2px focus ring.
+10. Selected uses `--selected` / `--selected-foreground`.
+11. Disabled uses 30% opacity.
+12. Disabled does not hover/activate.
+13. `leadingDecoration` renders before the label.
+14. Decoration container is 20px wide.
+15. Decoration target is 16 × 16px.
+16. Decoration uses 2px internal padding.
+17. Selected check example matches Figma.
+18. Selected decoration inherits selected foreground colour.
+19. Selected does not automatically inject a check.
+20. No public Figma `state` prop.
+21. No public `showLeftDecoration` boolean.
+22. Width is not hard-coded to 236px.
+23. No Button-style motion.
+24. No unnecessary dependency.
 
-## 18. Source of Truth
+## 23. Source of Truth
 
-1. Neo-Lite Figma Menu Item
-2. Neo-Lite semantic tokens
-3. This specification
-4. Implementation
+Priority:
+
+1. Neo-Lite Figma Menu Item component (`2025:10723`)
+2. Selected-with-check example (`2077:360`)
+3. Neo-Lite semantic tokens
+4. This specification
+5. Implementation

@@ -4,16 +4,14 @@
 
 `Card` is a reusable Neo-Lite content container for presenting an image, optional badges, subtitle, title, body content, and footer actions.
 
-The Figma component defines two orientations and their hover states:
+The Card component supports the vertical visual variant only:
 
 ```text
 Vertical
 Vertical-hover
-Horizontal
-Horizontal-hover
 ```
 
-React should expose orientation and semantic content slots rather than a Figma-style combined `variant` state.
+React should expose semantic content slots rather than a Figma-style combined `variant` state.
 
 ## 2. Figma Source
 
@@ -30,9 +28,7 @@ type FigmaCardProps = {
   image?: boolean;
   variant?:
     | "Vertical"
-    | "Horizontal"
-    | "Vertical-hover"
-    | "Horizontal-hover";
+    | "Vertical-hover";
 };
 ```
 
@@ -41,12 +37,8 @@ These should not map 1:1 to the public React API.
 ## 3. Recommended React API
 
 ```ts
-export type CardOrientation = "vertical" | "horizontal";
-
 export interface CardProps
   extends React.HTMLAttributes<HTMLDivElement> {
-  orientation?: CardOrientation;
-
   image?: React.ReactNode;
   badges?: React.ReactNode;
 
@@ -58,16 +50,13 @@ export interface CardProps
 }
 ```
 
-Recommended default:
-
-```ts
-orientation = "vertical";
-```
-
 Do not expose:
 
 ```text
 variant="Vertical-hover"
+variant="Horizontal"
+variant="Horizontal-hover"
+orientation
 hovered
 image=true/false
 badge
@@ -78,7 +67,7 @@ Hover is real interaction, not a public state prop.
 
 ## 4. Overall Visual Contract
 
-All orientations use:
+Card uses:
 
 ```text
 background: var(--card)
@@ -98,6 +87,7 @@ Hover:
 ```text
 box-shadow-2
 4px 4px 0 0 var(--shadow-color)
+translateY(-4px)
 ```
 
 Use the existing Neo-Lite semantic mapping where available:
@@ -106,7 +96,9 @@ Use the existing Neo-Lite semantic mapping where available:
 hover:shadow-md
 ```
 
-Do not add Button-style translation/lift unless separately designed.
+The hover transform and shadow should be applied to a visual child inside the
+Card while the outer container remains the stable hover target. This prevents
+pointer enter/leave loops when the cursor is positioned on the card edge.
 
 ## 5. Orientation: Vertical
 
@@ -119,7 +111,15 @@ height: 492px
 
 These are design-example dimensions, not strict production width/height contracts.
 
-Production should preserve the vertical structure while allowing content-responsive sizing.
+Production should preserve the vertical structure while being fully responsive to its parent container.
+
+The Card root should use:
+
+```text
+width: 100%
+```
+
+and should not own a fixed production width.
 
 Structure:
 
@@ -134,40 +134,6 @@ Card
 └── Footer
 ```
 
-## 6. Orientation: Horizontal
-
-Figma reference geometry:
-
-```text
-width: 555px
-```
-
-Image region:
-
-```text
-width: 214px
-height: full card height
-border-right: 1px solid var(--card-foreground)
-```
-
-Content region fills remaining width.
-
-Structure:
-
-```text
-Card
-├── Image
-└── Main
-    ├── Header
-    │   ├── Badges
-    │   ├── Subtitle
-    │   └── Title
-    ├── Content
-    └── Footer
-```
-
-Do not hard-code 555px or 214px unless needed for the Storybook example. Production layout should remain responsive.
-
 ## 7. Image Area
 
 Figma image wrapper uses:
@@ -180,17 +146,12 @@ overflow: hidden
 Vertical:
 
 ```text
-height: 206px
+width: 100%
+aspect-ratio: 343 / 206
 border-bottom: 1px solid var(--border)
 ```
 
-Horizontal:
-
-```text
-width: 214px
-align-self: stretch
-border-right: 1px solid var(--card-foreground)
-```
+The Figma reference is approximately 343px × 206px. Treat that as an aspect-ratio contract, not a fixed pixel size.
 
 The actual illustration in Figma is example content, not part of the core Card API.
 
@@ -291,19 +252,14 @@ Content region:
 ```text
 padding-top: 8px
 padding-left/right: 16px
+padding-bottom: 16px
 width: 100%
 ```
 
-Vertical orientation:
+Content behavior:
 
 ```text
 flex-grow: 1
-```
-
-Horizontal orientation:
-
-```text
-content sizes naturally
 ```
 
 Body copy uses Neo-Lite paragraph style:
@@ -356,11 +312,10 @@ Do not duplicate Button styling inside Card.
 
 ## 14. Hover State
 
-Figma defines hover separately for each orientation:
+Figma defines a vertical hover state:
 
 ```text
 Vertical-hover
-Horizontal-hover
 ```
 
 The only inspected visual difference is:
@@ -408,23 +363,33 @@ Interactive footer controls remain separate Buttons.
 
 ## 16. Width and Responsiveness
 
-Figma example dimensions should not become strict API contracts:
+Card must be responsive to its parent container.
+
+Production root:
 
 ```text
-Vertical: 343px × 492px
-Horizontal: 555px wide
+width: 100%
 ```
 
-Recommended production behaviour:
+Do not hard-code the Figma reference widths:
 
 ```text
-width: 100% of consumer container
-max/intrinsic sizing controlled by consumer
+343px
 ```
 
-For horizontal orientation on narrow screens, do not invent an automatic orientation switch unless explicitly designed.
+The parent controls the Card's available width.
 
-Consumers can choose vertical orientation responsively.
+### Image responsiveness
+
+The image region scales with Card width while preserving:
+
+```text
+aspect-ratio: 343 / 206
+```
+
+Do not use a fixed `height: 206px` in production.
+
+The media itself should preserve its intended aspect ratio with an aspect-ratio wrapper and appropriate object-fit behaviour.
 
 ## 17. Radius
 
@@ -457,19 +422,34 @@ Do not hard-code raw shadow values if a semantic utility exists.
 
 ## 19. Motion
 
-Figma does not define Card translation or animation.
-
-Do not add:
+Card hover uses the same Neo-Lite Y-only hover lift as Button:
 
 ```text
-translate
-scale
-lift
-transition-all
-animated shadow movement
+translateY(-4px)
+duration: 150ms
+easing: ease-out
 ```
 
-Hover shadow may change immediately.
+The movement must consume the Neo-Lite motion/transform token rather than
+hard-coding `-4px` in `Card.tsx`.
+
+Animate only:
+
+```text
+transform
+box-shadow
+```
+
+Do not use:
+
+```text
+scale
+transition-all
+animated layout properties
+```
+
+Respect `prefers-reduced-motion`: remove the hover translation and transition
+when reduced motion is requested, while preserving the hover shadow.
 
 ## 20. Accessibility
 
@@ -491,8 +471,7 @@ Recommended compact structure:
 Components
 └── Card
     ├── Playground
-    ├── Vertical
-    └── Horizontal
+    └── Without image
 ```
 
 ### Playground
@@ -500,9 +479,11 @@ Components
 Controls:
 
 ```text
-orientation
 title
 subtitle
+showImage
+showBadges
+showButtons
 ```
 
 Use real hover interaction.
@@ -518,13 +499,9 @@ footer Buttons
 
 using existing Neo-Lite components.
 
-### Vertical
+### Without image
 
-Reproduce the Figma vertical example.
-
-### Horizontal
-
-Reproduce the Figma horizontal example.
+Reproduce the vertical Card composition with the optional image slot omitted.
 
 Do not create separate hover stories.
 
@@ -534,7 +511,6 @@ Hover should be validated through real pointer interaction.
 
 ```tsx
 <Card
-  orientation="vertical"
   image={<ExampleImage />}
   badges={
     <>
@@ -557,14 +533,14 @@ Hover should be validated through real pointer interaction.
 
 ## 23. Acceptance Criteria
 
-1. Supports `vertical` and `horizontal` orientations.
-2. Default orientation is vertical.
+1. Supports the vertical Card variant only.
+2. Does not expose an orientation prop.
 3. Uses card background.
 4. Uses 1px border.
 5. Uses 4px radius.
 6. Uses `box-shadow-2` on real hover.
 7. No public hover-state prop.
-8. No Card lift/translation.
+8. Card hover uses Y-only translation on an inner visual child while the outer container remains the stable hover target.
 9. Image slot is optional.
 10. Badges slot is optional.
 11. Existing Badge component is reusable in header.
@@ -573,16 +549,19 @@ Hover should be validated through real pointer interaction.
 14. Body uses Neo-Lite paragraph typography.
 15. Header uses 16px horizontal/top padding.
 16. Header gap is 8px.
-17. Content uses 8px top / 16px horizontal padding.
+17. Content uses 8px top / 16px horizontal / 16px bottom padding.
 18. Footer uses 16px padding.
 19. Footer gap is 8px.
 20. Existing Button is reusable in footer.
-21. Figma dimensions are not hard-coded as universal production sizes.
-22. No public `image` boolean.
-23. No public Figma combined `variant` states.
-24. Card remains non-interactive by default.
-25. No temporary Figma asset URLs remain.
-26. No unnecessary dependency is added.
+21. Card root is responsive and fills its parent width.
+22. Image uses aspect ratio 343 / 206 rather than fixed 206px height.
+23. Horizontal Card variant is not exposed.
+24. Figma dimensions are reference-only, not universal production sizes.
+25. No public `image` boolean.
+26. No public Figma combined `variant` states.
+27. Card remains non-interactive by default.
+28. No temporary Figma asset URLs remain.
+29. No unnecessary dependency is added.
 
 ## 24. Source of Truth
 

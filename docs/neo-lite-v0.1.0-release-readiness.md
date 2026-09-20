@@ -15,14 +15,14 @@ Release intent: stable MVP component foundation before public documentation webs
 | Component | Public export | Storybook entry | Latest spec used |
 | --- | --- | --- | --- |
 | Badge | `Badge`, `BadgeProps`, `BadgeVariant` | `Components/Badge` | `neo-lite-badge-spec-v0.1.md` |
-| Button | `Button`, `ButtonProps`, `ButtonSize`, `ButtonVariant` | `Components/Button` | `neo-lite-button-spec-v0.2.md` |
-| Card | `Card`, `CardProps` | `Components/Card` | `neo-lite-card-spec-v0.2.md` |
+| Button | `Button`, `ButtonProps`, `ButtonSize`, `ButtonVariant` | `Components/Button` | `neo-lite-button-spec-v0.1.md` |
+| Card | `Card`, `CardProps` | `Components/Card` | `neo-lite-card-spec-v0.1.md` |
 | Checkbox | `Checkbox`, `CheckboxProps` | `Components/Checkbox` | `neo-lite-checkbox-spec-v0.1.md` |
 | Dialog | `Dialog`, `DialogProps` | `Components/Dialog` | `neo-lite-dialog-spec-v0.1.md` |
-| Input | `Input`, `InputProps` | `Components/Input` | `neo-lite-input-spec-v0.1-updated.md` |
+| Input | `Input`, `InputProps` | `Components/Input` | `neo-lite-input-spec-v0.1.md` |
 | Menu | `Menu`, `MenuProps` | `Components/Menu` | `neo-lite-menu-spec-v0.1.md` |
-| MenuItem | `MenuItem`, `MenuItemProps` | `Components/Menu Item` | `neo-lite-menu-item-spec-v0.2.md` |
-| Selection | `Selection`, `SelectionOption`, `SelectionProps` | `Components/Selection` | `neo-lite-selection-spec-v0.3.md` |
+| MenuItem | `MenuItem`, `MenuItemProps` | `Components/Menu Item` | `neo-lite-menu-item-spec-v0.1.md` |
+| Selection | `Selection`, `SelectionOption`, `SelectionProps` | `Components/Selection` | `neo-lite-selection-spec-v0.1.md` |
 | Tab | `Tab`, `TabProps` | `Components/Tabs` | `neo-lite-tab-spec-v0.1.md` |
 | Tabs | `Tabs`, `TabsProps` | `Components/Tabs` | `neo-lite-tabs-spec-v0.1.md` |
 

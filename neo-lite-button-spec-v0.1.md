@@ -29,29 +29,49 @@ type ButtonVariant =
 type ButtonSize = "xs" | "sm" | "lg";
 ```
 
+Button height is fixed by size and must not vary according to whether the Button contains text, icons, or both.
+
 ### XS
-- Padding: 8px
+- Height: 38px
+- Horizontal padding: 8px
 - Gap: 4px
 - Icon: 20px
 - Label: 14px
 - Radius: 4px
-- Tailwind: `p-2 gap-1 rounded-sm`
+- Border: 1px
+- Suggested Tailwind geometry: `h-[38px] px-2 gap-1 rounded-sm`
 
 ### SM
-- Padding: 12px
+- Height: 50px
+- Horizontal padding: 12px
 - Gap: 8px
 - Icon: 24px
 - Label: 16px
 - Radius: 4px
-- Tailwind: `p-3 gap-2 rounded-sm`
+- Border: 1px
+- Suggested Tailwind geometry: `h-[50px] px-3 gap-2 rounded-sm`
 
 ### LG
-- Padding: 16px
+- Height: 64px
+- Horizontal padding: 16px
 - Gap: 12px
 - Icon: 24px
 - Label: 20px
 - Radius: 4px
-- Tailwind: `p-4 gap-3 rounded-sm`
+- Border: 1px
+- Suggested Tailwind geometry: `h-[64px] px-4 gap-3 rounded-sm`
+
+Do not rely on vertical padding plus content height to determine the rendered height.
+
+Icon-only Buttons use the same size API and must remain square:
+
+```text
+xs = 38 × 38px
+sm = 50 × 50px
+lg = 64 × 64px
+```
+
+Do not add public `icon-xs`, `icon-sm`, or `icon-lg` size values.
 
 ## 3. States
 
@@ -69,19 +89,55 @@ In React, do not expose these as a `state` prop. Use native browser states:
 No shadow.
 
 ### Hover
-Apply Neo-Lite hard shadow:
+
+Apply the Neo-Lite hard shadow and hover-lift interaction.
 
 ```txt
 Figma: box-shadow-2
-CSS: 4px 4px 0 0 var(--shadow-color)
-Tailwind: hover:shadow-md
+CSS shadow: 4px 4px 0 0 var(--shadow-color)
+Tailwind shadow: enabled:enabled:hover:shadow-md
 ```
+
+Hover transform:
+
+```txt
+translateY(-4px)
+```
+
+This movement must consume the Neo-Lite motion/transform token rather than hard-coding `-4px` in `Button.tsx`.
+
+Motion tokens:
+
+```txt
+duration = 150ms
+easing = ease-out
+transform/hover-offset = -4px
+```
+
+Animate only:
+
+```txt
+transform
+box-shadow
+background-color
+```
+
+Do not use `transition-all`.
 
 Primary also uses:
 
 ```txt
-hover:bg-primary-hover
+enabled:enabled:hover:bg-primary-hover
 ```
+
+Disabled Buttons must not move or receive hover shadow/background behaviour.
+
+The hover transform and shadow should be applied to a visual child inside the
+Button while the outer `<button>` remains the stable hit target, semantic
+element, focus target, and disabled-state owner. This prevents pointer
+enter/leave loops when the cursor is positioned on the button edge.
+
+Respect `prefers-reduced-motion`: remove the hover translation and transition when reduced motion is requested, while preserving clear interaction/focus feedback.
 
 ### Focus
 Standard variants:
@@ -216,6 +272,34 @@ Important:
 - This maps to Figma `box-shadow-2`
 - `box-shadow-2 = 4px 4px 0 0 var(--shadow-color)`
 
+
+### Motion Tokens
+
+The Button hover interaction uses Neo-Lite motion variables defined in Figma:
+
+```text
+duration                 150ms
+easing                   ease-out
+transform/hover-offset   -4px
+```
+
+The implementation should map these to reusable CSS design tokens and consume those tokens from the Button implementation.
+
+Do not hard-code these values directly in `Button.tsx`.
+
+The intended interaction is:
+
+```text
+default
+→ hover:
+  translateY(-4px)
+  + shadow-md
+  + primary-hover background for Primary only
+
+duration: 150ms
+easing: ease-out
+```
+
 ## 7. Suggested Variant Classes
 
 ### Accent
@@ -225,7 +309,7 @@ bg-accent
 text-accent-foreground
 border
 border-border
-hover:shadow-md
+enabled:hover:shadow-md
 ```
 
 ### Primary
@@ -235,8 +319,8 @@ bg-primary
 text-primary-foreground
 border
 border-border
-hover:bg-primary-hover
-hover:shadow-md
+enabled:hover:bg-primary-hover
+enabled:hover:shadow-md
 ```
 
 ### Secondary
@@ -246,7 +330,7 @@ bg-secondary
 text-secondary-foreground
 border
 border-border
-hover:shadow-md
+enabled:hover:shadow-md
 ```
 
 ### Destructive
@@ -256,7 +340,7 @@ bg-destructive
 text-destructive-foreground
 border
 border-destructive-border
-hover:shadow-md
+enabled:hover:shadow-md
 ```
 
 Shared classes:
@@ -306,34 +390,99 @@ The implementation must:
 
 ## 10. Storybook Requirements
 
-Create stories for:
-- all four variants
-- all three sizes
+Keep the Button submenu compact.
+
+Recommended structure:
+
+```text
+Components
+└── Button
+    ├── Playground
+    ├── Text Only
+    ├── Leading Icon
+    ├── Trailing Icon
+    ├── Both Icons
+    └── Icon Only
+```
+
+### Playground
+
+The Playground should act as the main visual QA view.
+
+It should render all four variants across all three sizes:
+
+```text
+accent
+primary
+secondary
+destructive
+
+×
+xs
+sm
+lg
+```
+
+Useful controls can configure properties such as:
+
+```text
+children
+disabled
+```
+
+Do not create separate submenu stories for:
+
+```text
+sizes
+variants
+disabled
+hover
+focus-visible
+variant-size matrix
+```
+
+Hover and focus should use real browser interaction rather than fake React `state` props or Storybook-only styling.
+
+### Content composition stories
+
+Keep dedicated stories for:
+
 - text only
 - leading icon
 - trailing icon
 - both icons
 - icon only
-- disabled
-- focus-visible
-- hover
-- a matrix showing variants × sizes
+
+These stories are primarily for validating content composition and icon geometry.
 
 ## 11. Acceptance Criteria
 
 The implementation is complete when:
+
 - all four variants match Figma
 - all three sizes match Figma
+- XS is exactly 38px high
+- SM is exactly 50px high
+- LG is exactly 64px high
+- text-only, leading-icon, trailing-icon, both-icon, and icon-only Buttons have identical height within the same size
+- icon-only XS is 38 × 38px
+- icon-only SM is 50 × 50px
+- icon-only LG is 64 × 64px
 - icon sizing matches Figma
 - hover shadow matches Figma `box-shadow-2`
+- hover movement uses the Neo-Lite `-4px` hover-offset token
+- hover motion uses 150ms `ease-out`
+- only transform, box-shadow, and background-color are transitioned
+- reduced-motion preferences are respected
 - primary hover background matches Figma
 - focus ring matches Figma
 - destructive focus ring matches Figma
-- disabled state uses 30% opacity
+- disabled state uses 30% opacity and has no hover movement
 - no Figma-only `state` prop exists in React
 - icon-only buttons are accessible
 - implementation uses Neo-Lite semantic tokens
-- component is demonstrated in Storybook
+- Storybook Playground shows all variants × sizes
+- Storybook submenu remains intentionally compact
 
 ## 12. Source of Truth
 
