@@ -3,6 +3,7 @@ import { useEffect, useState, type ReactNode } from "react";
 import heroImage from "../../assets/overview/hero.png";
 import { Icon } from "../../assets/icons/Icon";
 import { Button } from "../../components/button";
+import { FIGMA_COMMUNITY_URL } from "../../constants/links";
 import { cn } from "../../utils/cn";
 import { Footer, Header } from "../home/HomePage";
 
@@ -215,7 +216,14 @@ function Explore() {
       <div className="text-center"><SectionHeading label="EXPLORE" title="Fully documented open resources." /></div>
       <div className="flex flex-wrap justify-center gap-4">
         <Button variant="secondary" size="xs" leadingIcon={<Icon name="storybook" />}>Playground</Button>
-        <Button variant="accent" size="xs" leadingIcon={<Icon name="figma" />}>Figma</Button>
+        <Button
+          variant="accent"
+          size="xs"
+          leadingIcon={<Icon name="figma" />}
+          onClick={() => window.open(FIGMA_COMMUNITY_URL, "_blank", "noopener,noreferrer")}
+        >
+          Figma
+        </Button>
         <Button variant="primary" size="xs" leadingIcon={<Icon name="github" />}>Github</Button>
       </div>
     </PageBand>

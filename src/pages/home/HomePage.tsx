@@ -17,6 +17,7 @@ import { Button } from "../../components/button";
 import { Card } from "../../components/card";
 import { Checkbox } from "../../components/checkbox";
 import { Input } from "../../components/input";
+import { FIGMA_COMMUNITY_URL } from "../../constants/links";
 import { cn } from "../../utils/cn";
 
 type IconImageProps = {
@@ -302,6 +303,7 @@ function Hero() {
             <Button
               variant="primary"
               size="xs"
+              onClick={() => window.open(FIGMA_COMMUNITY_URL, "_blank", "noopener,noreferrer")}
               className="lg:[&>span]:h-[50px] lg:[&>span]:px-3 lg:[&>span]:text-base"
               leadingIcon={<Icon name="figma" />}
               trailingIcon={<Icon name="arrow-right" />}
@@ -503,7 +505,12 @@ function Resources() {
           <Button variant="secondary" size="xs" leadingIcon={<Icon name="storybook" />}>
             Playground
           </Button>
-          <Button variant="accent" size="xs" leadingIcon={<Icon name="figma" />}>
+          <Button
+            variant="accent"
+            size="xs"
+            leadingIcon={<Icon name="figma" />}
+            onClick={() => window.open(FIGMA_COMMUNITY_URL, "_blank", "noopener,noreferrer")}
+          >
             Figma
           </Button>
           <Button variant="primary" size="xs" leadingIcon={<Icon name="github" />}>
