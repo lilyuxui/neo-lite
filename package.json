@@ -1,6 +1,6 @@
 {
   "name": "neo-lite",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Accessible React components with a lightweight neo-brutalist visual language.",
   "license": "MIT",
   "type": "module",
