@@ -4,3 +4,14 @@ storybook-static
 dist
 package-dist
 .DS_Store
+
+# Local configuration and credentials
+.env
+.env.*
+!.env.example
+.npmrc
+.vercel
+*.key
+*.pem
+*.p12
+*.pfx

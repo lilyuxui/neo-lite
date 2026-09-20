@@ -42,7 +42,7 @@ React and React DOM are peer dependencies for library consumers. This repository
 
 ### Prerequisites
 
-- Node.js 20 or newer
+- Node.js 20.19+ or Node.js 22.12+
 - npm
 
 ### Install dependencies
@@ -255,10 +255,9 @@ npm pack --dry-run
 
 Before publishing a new release:
 
-1. Choose a project license, add a root `LICENSE` file, and add the matching `license` field to `package.json`.
-2. Update the package version.
-3. Test the generated tarball in a clean React project.
-4. Sign in to npm and run `npm publish`.
+1. Update the package version.
+2. Test the generated tarball in a clean React project.
+3. Sign in to npm and run `npm publish`.
 
 The `prepack` script runs typechecking and rebuilds the package automatically before npm creates or publishes a tarball.
 
@@ -334,3 +333,7 @@ Before considering a change complete:
 ## Project Status
 
 Neo-Lite UI is a public repository under active development. The website is configured for Vercel deployment, and `neo-lite@0.1.0` is publicly available from npm. APIs and documentation may evolve as components are refined against Figma and exercised in Storybook.
+
+## License
+
+Neo-Lite is available under the [MIT License](LICENSE).
