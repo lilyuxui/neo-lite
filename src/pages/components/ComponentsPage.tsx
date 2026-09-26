@@ -28,22 +28,16 @@ const componentDocs = [
 ] as const;
 
 type ComponentSlug = (typeof componentDocs)[number]["slug"];
+const badgeVariants = ["accent", "secondary", "primary", "destructive"] as const;
 
 function BadgePreview() {
   const icon = <Icon svg={bookmarkIcon} className="size-4" />;
   return (
-    <>
-      <div className="flex flex-wrap items-center justify-center gap-6 lg:hidden">
-        {(["Favourite", "Accent", "Accent", "Accent"] as const).map((label, index) => (
-          <Badge key={`${label}-${index}`} variant="accent" leadingIcon={icon}>{label}</Badge>
-        ))}
-      </div>
-      <div className="hidden flex-wrap items-center justify-center gap-6 lg:flex">
-        {(["accent", "secondary", "primary", "destructive"] as const).map((variant) => (
-          <Badge key={variant} variant={variant} leadingIcon={icon} className="capitalize">{variant}</Badge>
-        ))}
-      </div>
-    </>
+    <div className="flex flex-wrap items-center justify-center gap-6">
+      {badgeVariants.map((variant) => (
+        <Badge key={variant} variant={variant} leadingIcon={icon} className="capitalize">{variant}</Badge>
+      ))}
+    </div>
   );
 }
 
