@@ -1,5 +1,6 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
+import { Analytics } from "@vercel/analytics/react";
 
 import { HomePage } from "./pages/home/HomePage";
 import { OverviewPage } from "./pages/overview/OverviewPage";
@@ -21,5 +22,6 @@ createRoot(rootElement).render(
     ) : (
       <HomePage />
     )}
+    <Analytics />
   </StrictMode>,
 );
