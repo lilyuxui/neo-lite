@@ -332,7 +332,7 @@ function WhyNeoLite() {
       <div className="flex flex-col gap-6 lg:gap-12">
         <Section
           label="WHY NEO-LITE"
-          title="Combines bold character of net-brutalism and light colour theme"
+          title="Combines bold character of neo-brutalism and light colour theme"
         />
         <div className="grid grid-cols-1 border-t border-border lg:grid-cols-3">
           {whyCards.map((card, index) => (
