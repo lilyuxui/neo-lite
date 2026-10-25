@@ -21,23 +21,25 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Basic: Story = {
-  args: {
-    mode: "single",
-    placeholder: "Select a date",
-  },
+  render: () => (
+    <div className="w-[296px]">
+      <DatePicker label="Date" mode="single" placeholder="Select a date" />
+    </div>
+  ),
 };
 
 export const Range: Story = {
-  args: {
-    mode: "range",
-    placeholder: "Start date - End date",
-  },
+  render: () => (
+    <div className="w-[296px]">
+      <DatePicker label="Date" mode="range" placeholder="Start date - End date" />
+    </div>
+  ),
 };
 
 export const ConstrainedDates: Story = {
   name: "Constrained dates",
   render: () => (
-    <div className="grid gap-6">
+    <div className="grid w-[296px] gap-6">
       <DatePicker label="Disabled" disabled />
       <DatePicker
         label="Constrained dates"

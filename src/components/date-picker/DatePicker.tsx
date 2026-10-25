@@ -245,101 +245,103 @@ export function DatePicker(props: DatePickerProps) {
         {required ? <span aria-hidden="true"> *</span> : null}
       </span>
 
-      <button
-        ref={triggerRef}
-        type="button"
-        disabled={disabled}
-        aria-haspopup="dialog"
-        aria-expanded={open}
-        aria-controls={open ? popupId : undefined}
-        aria-labelledby={`${labelId} ${valueId}`}
-        aria-describedby={hintId}
-        aria-required={required || undefined}
-        className={cn(
-          "flex w-full items-center gap-2 rounded-sm border border-border bg-background p-2 text-left outline-none disabled:cursor-not-allowed",
-          "focus-visible:shadow-focus",
-          open && "shadow-focus",
-        )}
-        onClick={() => (open ? closePicker({ restoreFocus: false }) : openPicker())}
-        onKeyDown={handleTriggerKeyDown}
-      >
-        <span className="flex w-5 shrink-0 items-center justify-center p-0.5 text-foreground [&_[data-neo-lite-icon]]:size-4">
-          <Icon svg={calendarIcon} />
-        </span>
-        <span
-          id={valueId}
-          className={cn("min-w-0 flex-1 px-1", displayValue ? "text-foreground" : "text-placeholder")}
+      <div className="relative">
+        <button
+          ref={triggerRef}
+          type="button"
+          disabled={disabled}
+          aria-haspopup="dialog"
+          aria-expanded={open}
+          aria-controls={open ? popupId : undefined}
+          aria-labelledby={`${labelId} ${valueId}`}
+          aria-describedby={hintId}
+          aria-required={required || undefined}
+          className={cn(
+            "flex w-full items-center gap-2 rounded-sm border border-border bg-background p-2 text-left outline-none disabled:cursor-not-allowed",
+            "focus-visible:shadow-focus",
+            open && "shadow-focus",
+          )}
+          onClick={() => (open ? closePicker({ restoreFocus: false }) : openPicker())}
+          onKeyDown={handleTriggerKeyDown}
         >
-          {displayValue ?? resolvedPlaceholder}
-        </span>
-      </button>
+          <span className="flex w-5 shrink-0 items-center justify-center p-0.5 text-foreground [&_[data-neo-lite-icon]]:size-4">
+            <Icon svg={calendarIcon} />
+          </span>
+          <span
+            id={valueId}
+            className={cn("min-w-0 flex-1 px-1", displayValue ? "text-foreground" : "text-placeholder")}
+          >
+            {displayValue ?? resolvedPlaceholder}
+          </span>
+        </button>
+
+        {open ? (
+          <div
+            id={popupId}
+            role="dialog"
+            aria-label={`${label} calendar`}
+            className="absolute left-0 top-full z-50 mt-1"
+          >
+            {isRangeMode ? (
+              <>
+                <div className="overflow-hidden rounded-sm border border-border bg-background shadow-sm sm:hidden">
+                  <CalendarPanel
+                    {...sharedCalendarProps}
+                    embedded
+                    autoFocus
+                    navigation="all"
+                    rangeMode
+                    month={visibleMonth}
+                    onMonthChange={setVisibleMonth}
+                    rangeFrom={rangeValue?.from}
+                    rangeTo={rangeValue?.to}
+                    onDaySelect={selectRangeDate}
+                  />
+                </div>
+                <div className="hidden w-[594px] overflow-hidden rounded-sm border border-border bg-background shadow-sm sm:flex">
+                  <CalendarPanel
+                    {...sharedCalendarProps}
+                    embedded
+                    autoFocus
+                    navigation="leading"
+                    rangeMode
+                    month={visibleMonth}
+                    onMonthChange={setVisibleMonth}
+                    rangeFrom={rangeValue?.from}
+                    rangeTo={rangeValue?.to}
+                    onDaySelect={selectRangeDate}
+                  />
+                  <CalendarPanel
+                    {...sharedCalendarProps}
+                    embedded
+                    navigation="trailing"
+                    rangeMode
+                    month={addMonths(visibleMonth, 1)}
+                    onMonthChange={(nextMonth) => setVisibleMonth(addMonths(nextMonth, -1))}
+                    rangeFrom={rangeValue?.from}
+                    rangeTo={rangeValue?.to}
+                    onDaySelect={selectRangeDate}
+                  />
+                </div>
+              </>
+            ) : (
+              <CalendarPanel
+                {...sharedCalendarProps}
+                autoFocus
+                value={singleValue}
+                month={visibleMonth}
+                onMonthChange={setVisibleMonth}
+                onDaySelect={selectSingleDate}
+              />
+            )}
+          </div>
+        ) : null}
+      </div>
 
       {hint ? (
         <span id={hintId} className="text-subtle-foreground">
           {hint}
         </span>
-      ) : null}
-
-      {open ? (
-        <div
-          id={popupId}
-          role="dialog"
-          aria-label={`${label} calendar`}
-          className="absolute left-0 top-full z-50 mt-1"
-        >
-          {isRangeMode ? (
-            <>
-              <div className="overflow-hidden rounded-sm border border-border bg-background shadow-sm sm:hidden">
-                <CalendarPanel
-                  {...sharedCalendarProps}
-                  embedded
-                  autoFocus
-                  navigation="all"
-                  rangeMode
-                  month={visibleMonth}
-                  onMonthChange={setVisibleMonth}
-                  rangeFrom={rangeValue?.from}
-                  rangeTo={rangeValue?.to}
-                  onDaySelect={selectRangeDate}
-                />
-              </div>
-              <div className="hidden w-[594px] overflow-hidden rounded-sm border border-border bg-background shadow-sm sm:flex">
-                <CalendarPanel
-                  {...sharedCalendarProps}
-                  embedded
-                  autoFocus
-                  navigation="leading"
-                  rangeMode
-                  month={visibleMonth}
-                  onMonthChange={setVisibleMonth}
-                  rangeFrom={rangeValue?.from}
-                  rangeTo={rangeValue?.to}
-                  onDaySelect={selectRangeDate}
-                />
-                <CalendarPanel
-                  {...sharedCalendarProps}
-                  embedded
-                  navigation="trailing"
-                  rangeMode
-                  month={addMonths(visibleMonth, 1)}
-                  onMonthChange={(nextMonth) => setVisibleMonth(addMonths(nextMonth, -1))}
-                  rangeFrom={rangeValue?.from}
-                  rangeTo={rangeValue?.to}
-                  onDaySelect={selectRangeDate}
-                />
-              </div>
-            </>
-          ) : (
-            <CalendarPanel
-              {...sharedCalendarProps}
-              autoFocus
-              value={singleValue}
-              month={visibleMonth}
-              onMonthChange={setVisibleMonth}
-              onDaySelect={selectSingleDate}
-            />
-          )}
-        </div>
       ) : null}
     </div>
   );
