@@ -67,6 +67,7 @@ Primary routes:
 - `/components/button`
 - `/components/card`
 - `/components/checkbox`
+- `/components/date-picker`
 - `/components/dialog`
 - `/components/input`
 - `/components/selection`
@@ -130,6 +131,7 @@ npm install neo-lite
 | `Button` | Primary, secondary, accent, and destructive actions |
 | `Card` | Structured content surface with optional media, badges, body, and footer |
 | `Checkbox` | Binary and indeterminate selection control |
+| `Calendar` and `DatePicker` | Keyboard-accessible single-date and date-range selection |
 | `Dialog` | Accessible modal surface with focus management |
 | `Input` | Single-line text input with labels, decorations, hints, and errors |
 | `Menu` | Presentational popup surface for menu content |

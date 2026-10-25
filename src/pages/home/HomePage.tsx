@@ -210,8 +210,8 @@ function MobileMenu({ onNavigate, currentPage }: { onNavigate: () => void; curre
         </div>
         {componentsExpanded ? (
           <ul id="mobile-component-links" className="flex flex-col gap-2 text-sm leading-[1.6]">
-            {["Badge", "Button", "Card", "Checkbox", "Dialog", "Input", "Selection", "Tabs"].map((name) => (
-              <li key={name}><a href={`/components/${name.toLowerCase()}`} onClick={onNavigate}>{name}</a></li>
+            {["Badge", "Button", "Card", "Checkbox", "Date picker", "Dialog", "Input", "Selection", "Tabs"].map((name) => (
+              <li key={name}><a href={`/components/${name.toLowerCase().replace(" ", "-")}`} onClick={onNavigate}>{name}</a></li>
             ))}
           </ul>
         ) : null}

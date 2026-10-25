@@ -8,6 +8,16 @@ export { Checkbox } from "./components/checkbox";
 export type { CheckboxProps } from "./components/checkbox";
 export { Dialog } from "./components/dialog";
 export type { DialogProps } from "./components/dialog";
+export { Calendar, DatePicker } from "./components/date-picker";
+export type {
+  CalendarProps,
+  CalendarValue,
+  DatePickerMode,
+  DatePickerProps,
+  DateRange,
+  RangeDatePickerProps,
+  SingleDatePickerProps,
+} from "./components/date-picker";
 export { Input } from "./components/input";
 export type { InputProps } from "./components/input";
 export { Menu, MenuItem } from "./components/menu";
