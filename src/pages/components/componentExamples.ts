@@ -51,6 +51,17 @@ export function CheckboxExample() {
     </div>
   );
 }`,
+  datePicker: `import { DatePicker } from "neo-lite";
+
+export function DatePickerExample() {
+  return (
+    <DatePicker
+      label="Appointment date"
+      hint="Choose a date for your appointment."
+      onValueChange={(date) => console.log(date)}
+    />
+  );
+}`,
   dialog: `import { useState } from "react";
 import { Button, Dialog } from "neo-lite-ui";
 

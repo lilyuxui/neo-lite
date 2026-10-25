@@ -20,6 +20,7 @@
   --neutral-900: #232323;
   --neutral-800: #333333;
   --neutral-700: #484848;
+  --neutral-600: #5e5e5e;
   --neutral-500: #737373;
   --neutral-400: #888888;
   --neutral-300: #c8c8c8;
@@ -119,6 +120,8 @@
 
   --selected: var(--neutral-950);
   --selected-foreground: var(--neutral-0);
+  --subtle-foreground: var(--neutral-600);
+  --selected-subtle-foreground: var(--neutral-300);
 
   --primary: var(--neutral-950);
   --primary-hover: var(--neutral-700);
@@ -230,6 +233,9 @@
 
   --color-selected: var(--selected);
   --color-selected-foreground: var(--selected-foreground);
+  --color-subtle-foreground: var(--subtle-foreground);
+  --color-selected-subtle-foreground:
+    var(--selected-subtle-foreground);
 
   --color-primary: var(--primary);
   --color-primary-hover: var(--primary-hover);

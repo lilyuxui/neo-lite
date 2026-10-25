@@ -7,6 +7,7 @@ import { Badge } from "../../components/badge";
 import { Button } from "../../components/button";
 import { Card } from "../../components/card";
 import { Checkbox } from "../../components/checkbox";
+import { DatePicker } from "../../components/date-picker";
 import { Dialog } from "../../components/dialog";
 import { Input } from "../../components/input";
 import { Selection } from "../../components/selection";
@@ -21,6 +22,7 @@ const componentDocs = [
   { slug: "button", name: "Button", description: "An action control for common tasks and important decisions.", code: componentExamples.button },
   { slug: "card", name: "Card", description: "A contained surface for related content and actions.", code: componentExamples.card },
   { slug: "checkbox", name: "Checkbox", description: "A control for selecting one or more independent options.", code: componentExamples.checkbox },
+  { slug: "date-picker", name: "Date picker", description: "Choose a single date from an accessible, keyboard-navigable calendar.", code: componentExamples.datePicker },
   { slug: "dialog", name: "Dialog", description: "A focused layer for decisions or information that needs attention.", code: componentExamples.dialog },
   { slug: "input", name: "Input", description: "A field for entering and editing a single value.", code: componentExamples.input },
   { slug: "selection", name: "Selection", description: "A compact way to choose one option from a list.", code: componentExamples.selection },
@@ -53,6 +55,8 @@ function ComponentPreview({ slug }: { slug: ComponentSlug }) {
       return <Card className="max-w-[280px]" image={<img src={verticalCardImage} alt="" />} title="Your profile">Manage your details in one place.</Card>;
     case "checkbox":
       return <div className="flex flex-col gap-4"><label className="flex items-center gap-2"><Checkbox defaultChecked />Receive updates</label><label className="flex items-center gap-2"><Checkbox />Save my preferences</label></div>;
+    case "date-picker":
+      return <DatePicker label="Appointment date" hint="Choose a date for your appointment." />;
     case "dialog":
       return <><Button variant="primary" onClick={() => setDialogOpen(true)}>Open dialog</Button><Dialog open={dialogOpen} onOpenChange={setDialogOpen} title="Confirm action" footer={<Button variant="primary" onClick={() => setDialogOpen(false)}>Done</Button>}>This is a Neo-Lite dialog.</Dialog></>;
     case "input":
@@ -67,7 +71,7 @@ function ComponentPreview({ slug }: { slug: ComponentSlug }) {
 function PreviewFrame({ slug, code, label }: { slug: ComponentSlug; code: string; label: string }) {
   return (
     <div className="min-w-0 border border-border p-4 lg:p-6">
-      <div className="flex min-h-[206px] w-full items-center justify-center lg:min-h-[154px]">
+      <div className={cn("flex min-h-[206px] w-full items-start justify-center pt-8 lg:min-h-[154px]", slug === "date-picker" && "min-h-[430px] lg:min-h-[430px]")}>
         <ComponentPreview slug={slug} />
       </div>
       <CodeViewer code={code} label={label} />
