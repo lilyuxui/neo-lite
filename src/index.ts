@@ -22,6 +22,8 @@ export { Input } from "./components/input";
 export type { InputProps } from "./components/input";
 export { Menu, MenuItem } from "./components/menu";
 export type { MenuItemProps, MenuProps } from "./components/menu";
+export { RadioButton, RadioGroup } from "./components/radio";
+export type { RadioButtonProps, RadioGroupProps } from "./components/radio";
 export { Selection } from "./components/selection";
 export type { SelectionOption, SelectionProps } from "./components/selection";
 export { Tab, Tabs } from "./components/tabs";
