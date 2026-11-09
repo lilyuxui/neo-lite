@@ -90,6 +90,39 @@ export function InputExample() {
     />
   );
 }`,
+  radio: `import { RadioButton, RadioGroup } from "neo-lite";
+
+export function RadioExample() {
+  return (
+    <div className="flex flex-wrap gap-12">
+      <RadioGroup
+        name="contact-method"
+        aria-label="Preferred contact method"
+        defaultValue="email"
+      >
+        <RadioButton value="email" label="Email" />
+        <RadioButton value="phone" label="Phone" />
+        <RadioButton value="message" label="Message" />
+      </RadioGroup>
+
+      <div className="flex flex-col gap-3">
+        <RadioButton
+          name="delivery-method"
+          value="standard"
+          label="Standard delivery"
+          description="Arrives in 3–5 business days."
+          defaultChecked
+        />
+        <RadioButton
+          name="delivery-method"
+          value="express"
+          label="Express delivery"
+          description="Arrives the next business day."
+        />
+      </div>
+    </div>
+  );
+}`,
   selection: `import { Selection } from "neo-lite-ui";
 
 const options = [

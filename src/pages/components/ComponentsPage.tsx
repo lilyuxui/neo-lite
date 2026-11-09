@@ -10,6 +10,7 @@ import { Checkbox } from "../../components/checkbox";
 import { DatePicker } from "../../components/date-picker";
 import { Dialog } from "../../components/dialog";
 import { Input } from "../../components/input";
+import { RadioButton, RadioGroup } from "../../components/radio";
 import { Selection } from "../../components/selection";
 import { Tab, Tabs } from "../../components/tabs";
 import { Footer, Header } from "../home/HomePage";
@@ -25,6 +26,7 @@ const componentDocs = [
   { slug: "date-picker", name: "Date picker", description: "Choose a single date from an accessible, keyboard-navigable calendar.", code: componentExamples.datePicker },
   { slug: "dialog", name: "Dialog", description: "A focused layer for decisions or information that needs attention.", code: componentExamples.dialog },
   { slug: "input", name: "Input", description: "A field for entering and editing a single value.", code: componentExamples.input },
+  { slug: "radio", name: "Radio", description: "Choose one option from a set using compact controls or selectable cards.", code: componentExamples.radio },
   { slug: "selection", name: "Selection", description: "A compact way to choose one option from a list.", code: componentExamples.selection },
   { slug: "tabs", name: "Tabs", description: "Switch between related views without leaving the page.", code: componentExamples.tabs },
 ] as const;
@@ -61,6 +63,26 @@ function ComponentPreview({ slug }: { slug: ComponentSlug }) {
       return <><Button variant="primary" onClick={() => setDialogOpen(true)}>Open dialog</Button><Dialog open={dialogOpen} onOpenChange={setDialogOpen} title="Confirm action" footer={<Button variant="primary" onClick={() => setDialogOpen(false)}>Done</Button>}>This is a Neo-Lite dialog.</Dialog></>;
     case "input":
       return <Input containerClassName="max-w-[320px]" label="Email" type="email" placeholder="you@example.com" />;
+    case "radio":
+      return (
+        <div className="flex w-full flex-col items-center justify-center gap-10 sm:flex-row sm:items-start sm:gap-16">
+          <div className="flex flex-col gap-4">
+            <h2 className="text-base font-medium leading-[1.4]">Radio group</h2>
+            <RadioGroup name="contact-method" aria-label="Preferred contact method" defaultValue="email">
+              <RadioButton value="email" label="Email" />
+              <RadioButton value="phone" label="Phone" />
+              <RadioButton value="message" label="Message" />
+            </RadioGroup>
+          </div>
+          <div className="flex flex-col gap-4">
+            <h2 className="text-base font-medium leading-[1.4]">Radio button</h2>
+            <div className="flex flex-col gap-3">
+              <RadioButton name="delivery-method" value="standard" label="Standard delivery" description="Arrives in 3–5 business days." defaultChecked />
+              <RadioButton name="delivery-method" value="express" label="Express delivery" description="Arrives the next business day." />
+            </div>
+          </div>
+        </div>
+      );
     case "selection":
       return <div className="w-full max-w-[320px]"><Selection label="Role" options={[{ value: "designer", label: "Designer" }, { value: "developer", label: "Developer" }, { value: "other", label: "Other" }]} /></div>;
     case "tabs":
@@ -71,7 +93,7 @@ function ComponentPreview({ slug }: { slug: ComponentSlug }) {
 function PreviewFrame({ slug, code, label }: { slug: ComponentSlug; code: string; label: string }) {
   return (
     <div className="min-w-0 border border-border p-4 lg:p-6">
-      <div className={cn("flex min-h-[206px] w-full items-start justify-center pt-8 lg:min-h-[154px]", slug === "date-picker" && "min-h-[430px] lg:min-h-[430px]")}>
+      <div className={cn("flex min-h-[206px] w-full items-start justify-center pt-8 lg:min-h-[154px]", slug === "date-picker" && "min-h-[430px] lg:min-h-[430px]", slug === "radio" && "min-h-[390px] sm:min-h-[250px] lg:min-h-[250px]")}>
         <ComponentPreview slug={slug} />
       </div>
       <CodeViewer code={code} label={label} />

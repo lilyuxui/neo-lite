@@ -70,6 +70,7 @@ Primary routes:
 - `/components/date-picker`
 - `/components/dialog`
 - `/components/input`
+- `/components/radio`
 - `/components/selection`
 - `/components/tabs`
 
@@ -136,6 +137,7 @@ npm install neo-lite
 | `Input` | Single-line text input with labels, decorations, hints, and errors |
 | `Menu` | Presentational popup surface for menu content |
 | `MenuItem` | Interactive item used inside a Menu |
+| `RadioButton` and `RadioGroup` | Mutually exclusive selection using card or compact radio treatments |
 | `Selection` | Single-value dropdown selection control |
 | `Tabs` and `Tab` | Keyboard-accessible tab selection group and items |
 
